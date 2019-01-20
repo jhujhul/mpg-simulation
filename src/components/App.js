@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import "./App.css";
+
+import Team from "./Team";
 
 const getPoste = i => {
   if (i === 1) {
@@ -128,65 +129,6 @@ class App extends Component {
 const average = numberArray => {
   const sum = numberArray.reduce((sum, number) => number + sum, 0);
   return sum / numberArray.length;
-};
-
-const Team = props => {
-  const { team, onChange } = props;
-
-  const { players } = team;
-  const goal = players.filter(player => player.poste === "G");
-  const defensePlayers = players.filter(player => player.poste === "D");
-  const middlePlayers = players.filter(player => player.poste === "M");
-  const attackPlayers = players.filter(player => player.poste === "A");
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        "flex-direction": team.id === 1 ? "row" : "row-reverse",
-        alignItems: "center"
-      }}
-    >
-      {<PlayersLine players={goal} onChange={onChange} />}
-      {<PlayersLine players={defensePlayers} onChange={onChange} />}
-      {<PlayersLine players={middlePlayers} onChange={onChange} />}
-      {<PlayersLine players={attackPlayers} onChange={onChange} />}
-    </div>
-  );
-};
-
-const PlayersLine = props => {
-  const { players, onChange } = props;
-
-  return (
-    <div>
-      {players.map(player => {
-        return <Player player={player} onChange={onChange} key={player.id} />;
-      })}
-    </div>
-  );
-};
-
-const Player = props => {
-  const { player, onChange } = props;
-
-  const handleChange = event => {
-    onChange(player.id, event.target.value);
-  };
-
-  return (
-    <div>
-      {player.id} ({player.poste}){player.hasScored ? "GOAL" : ""}
-      <input
-        type="number"
-        step="0.5"
-        min="0"
-        max="10"
-        value={player.note || ""}
-        onChange={handleChange}
-      />
-    </div>
-  );
 };
 
 export default App;
