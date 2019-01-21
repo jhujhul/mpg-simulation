@@ -8,11 +8,11 @@ const getPoste = i => {
   }
 
   if (i <= 5) {
-    return "M";
+    return "D";
   }
 
   if (i <= 9) {
-    return "D";
+    return "M";
   }
 
   return "A";
