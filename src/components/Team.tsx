@@ -1,14 +1,29 @@
 import React from "react";
 import PlayersLine from "./PlayersLine";
 
-const Team = props => {
+interface TeamProps {
+  team: any;
+  onChange: (playerId: string, newRate: number) => void;
+}
+
+interface Player {
+  poste: string;
+}
+
+const Team: React.FunctionComponent<TeamProps> = props => {
   const { team, onChange } = props;
 
   const { players } = team;
-  const goal = players.filter(player => player.poste === "G");
-  const defensePlayers = players.filter(player => player.poste === "D");
-  const middlePlayers = players.filter(player => player.poste === "M");
-  const attackPlayers = players.filter(player => player.poste === "A");
+  const goal = players.filter((player: Player) => player.poste === "G");
+  const defensePlayers = players.filter(
+    (player: Player) => player.poste === "D"
+  );
+  const middlePlayers = players.filter(
+    (player: Player) => player.poste === "M"
+  );
+  const attackPlayers = players.filter(
+    (player: Player) => player.poste === "A"
+  );
 
   return (
     <div

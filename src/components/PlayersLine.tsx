@@ -1,7 +1,12 @@
 import React from "react";
 import Player from "./Player";
 
-const PlayersLine = props => {
+interface PlayersLineProps {
+  players: any[];
+  onChange: (playerId: string, newRate: number) => void;
+}
+
+const PlayersLine: React.FunctionComponent<PlayersLineProps> = props => {
   const { players, onChange } = props;
 
   return (

@@ -1,10 +1,15 @@
 import React from "react";
 
-const Player = props => {
+interface PlayerProps {
+  player: any;
+  onChange: (playerId: string, newRate: number) => void;
+}
+
+const Player: React.FunctionComponent<PlayerProps> = props => {
   const { player, onChange } = props;
 
-  const handleChange = event => {
-    onChange(player.id, event.target.value);
+  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    onChange(player.id, parseInt(event.currentTarget.value));
   };
 
   return (
