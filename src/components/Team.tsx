@@ -29,7 +29,7 @@ const Team: React.FunctionComponent<TeamProps> = props => {
     <div
       style={{
         display: "flex",
-        "flex-direction": team.id === 1 ? "row" : "row-reverse",
+        flexDirection: team.id === 1 ? "row" : "row-reverse",
         alignItems: "center"
       }}
     >

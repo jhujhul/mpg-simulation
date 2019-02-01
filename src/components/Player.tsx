@@ -9,7 +9,7 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
   const { player, onChange } = props;
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    onChange(player.id, parseInt(event.currentTarget.value));
+    onChange(player.id, parseFloat(event.currentTarget.value));
   };
 
   return (
@@ -20,7 +20,7 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
         step="0.5"
         min="0"
         max="10"
-        value={player.note || ""}
+        value={player.note}
         onChange={handleChange}
       />
     </div>

@@ -58,7 +58,7 @@ class App extends Component {
       ...this.state.players,
       [playerId]: {
         ...this.state.players[playerId],
-        note: newNote ? parseFloat(newNote) : null
+        note: newNote
       }
     };
     this.setState({
