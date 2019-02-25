@@ -1,37 +1,39 @@
 import { connect } from "react-redux";
+import { Dispatch, Action } from "redux";
 
 import { State, Player, PlayerPosition } from "../reducers";
-import App from "../components/App";
+import PlayerComponent, { PlayerProps } from "../components/Player";
+import { changePlayerGrade } from "../actions";
 
-interface EnhancedPlayer extends Player {
+export interface EnhancedPlayer extends Player {
   hasScored: boolean;
 }
 
-const mapStateToProps = (state: State) => ({
-  team1: getTeam(state, 1),
-  team2: getTeam(state, 2)
+interface StateProps {
+  player: EnhancedPlayer;
+}
+
+interface DispatchProps {
+  onGradeChange: (newGrade: number) => void;
+}
+
+interface OwnProps {
+  id: number;
+}
+
+const mapStateToProps = (state: State, ownProps: OwnProps): StateProps => ({
+  player: getPlayer(state, ownProps.id)
 });
 
-const getTeam = (state: State, teamId: number) => {
-  return {
-    ...state.teams[teamId],
-    players: state.teams[teamId].players.map(playerId =>
-      getPlayer(state, playerId)
-    )
-  };
-};
+const getPlayer = (state: State, playerId: number) => ({
+  ...state.players[playerId],
+  hasScored: hasPlayerScored(state, playerId)
+});
 
-const getPlayer = (state: State, playerId: number) => {
-  return {
-    ...state.players[playerId],
-    hasScored: hasPlayerScoreD(state, playerId)
-  };
-};
-
-const hasPlayerScoreD = (state: State, playerId: number) => {
+const hasPlayerScored = (state: State, playerId: number) => {
   const player = state.players[playerId];
 
-  if (player.position !== PlayerPosition.Forward || player.grade < 5.5) {
+  if (player.position === PlayerPosition.Forward || player.grade < 5.5) {
     return false;
   }
 
@@ -68,4 +70,14 @@ const average = (numberArray: number[]) => {
   return sum / numberArray.length;
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (
+  dispatch: Dispatch<Action>,
+  ownProps: OwnProps
+): DispatchProps => ({
+  onGradeChange: grade => dispatch(changePlayerGrade(ownProps.id, grade))
+});
+
+export default connect<StateProps, DispatchProps, OwnProps, State>(
+  mapStateToProps,
+  mapDispatchToProps
+)(PlayerComponent);

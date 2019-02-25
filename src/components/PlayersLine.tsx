@@ -1,19 +1,18 @@
 import React from "react";
-import Player from "./Player";
+import Player from "../containers/Player";
 
 interface PlayersLineProps {
-  players: any[];
-  onChange: (playerId: string, newRate: number) => void;
+  playerIds: number[];
 }
 
 const PlayersLine: React.FunctionComponent<PlayersLineProps> = props => {
-  const { players, onChange } = props;
+  const { playerIds } = props;
 
   return (
     <div>
-      {players.map(player => {
-        return <Player player={player} onChange={onChange} key={player.id} />;
-      })}
+      {playerIds.map(playerId => (
+        <Player id={playerId} key={playerId} />
+      ))}
     </div>
   );
 };

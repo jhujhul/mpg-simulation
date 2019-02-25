@@ -1,44 +1,51 @@
 import React from "react";
+
 import PlayersLine from "./PlayersLine";
+import { Player, PlayerPosition } from "../reducers";
 
 interface TeamProps {
-  team: any;
-  onChange: (playerId: string, newRate: number) => void;
-}
-
-interface Player {
-  poste: string;
+  id: number;
+  players: Player[];
 }
 
 const Team: React.FunctionComponent<TeamProps> = props => {
-  const { team, onChange } = props;
-
-  const { players } = team;
-  const goal = players.filter((player: Player) => player.poste === "G");
-  const defensePlayers = players.filter(
-    (player: Player) => player.poste === "D"
-  );
-  const middlePlayers = players.filter(
-    (player: Player) => player.poste === "M"
-  );
-  const attackPlayers = players.filter(
-    (player: Player) => player.poste === "A"
-  );
+  const { id, players } = props;
 
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: team.id === 1 ? "row" : "row-reverse",
+        flexDirection: id === 1 ? "row" : "row-reverse",
         alignItems: "center"
       }}
     >
-      {<PlayersLine players={goal} onChange={onChange} />}
-      {<PlayersLine players={defensePlayers} onChange={onChange} />}
-      {<PlayersLine players={middlePlayers} onChange={onChange} />}
-      {<PlayersLine players={attackPlayers} onChange={onChange} />}
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Goalkeeper)}
+        />
+      }
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Defender)}
+        />
+      }
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Midfielder)}
+        />
+      }
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Forward)}
+        />
+      }
     </div>
   );
 };
+
+const getPlayerIdsByPosition = (players: Player[], position: PlayerPosition) =>
+  players
+    .filter((player: Player) => player.position === position)
+    .map(player => player.id);
 
 export default Team;
