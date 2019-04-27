@@ -1,29 +1,36 @@
-import React from "react";
+import React, { CSSProperties } from "react";
+import classNames from "classnames";
 import { EnhancedPlayer } from "../containers/Player";
+import jerseyIcon from "../assets/football-jersey.svg";
 
 export interface PlayerProps {
   player: EnhancedPlayer;
-  onGradeChange: (newGrade: number) => void;
+  onClick: () => void;
 }
 
 const Player: React.FunctionComponent<PlayerProps> = props => {
-  const { player, onGradeChange } = props;
+  const { player, onClick } = props;
 
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    onGradeChange(parseFloat(event.currentTarget.value));
+  const style: CSSProperties = {
+    backgroundImage: `url(${jerseyIcon})`,
+    width: "65px",
+    height: "50px"
   };
+  const playerNameClass = classNames("text-center", {
+    "text-red-dark": player.isSelected
+  });
 
   return (
-    <div>
-      {player.id} ({player.position}){player.hasScored ? "GOAL" : ""}
-      <input
-        type="number"
-        step="0.5"
-        min="0"
-        max="10"
-        value={player.grade}
-        onChange={handleChange}
-      />
+    <div className="mx-1 my-3" onClick={onClick}>
+      <div
+        style={style}
+        className="text-red-darker bg-contain bg-no-repeat bg-center flex items-center justify-center"
+      >
+        <div className="bg-red-lighter border-red-darker border-2 rounded-full text-white h-6 w-6 flex items-center justify-center">
+          {player.grade}
+        </div>
+      </div>
+      <div className={playerNameClass}>{player.name}</div>
     </div>
   );
 };

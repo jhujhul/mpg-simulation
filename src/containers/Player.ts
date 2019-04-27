@@ -2,11 +2,12 @@ import { connect } from "react-redux";
 import { Dispatch, Action } from "redux";
 
 import { State, Player, PlayerPosition } from "../reducers";
-import PlayerComponent, { PlayerProps } from "../components/Player";
-import { changePlayerGrade } from "../actions";
+import PlayerComponent from "../components/Player";
+import { selectPlayer } from "../actions";
 
 export interface EnhancedPlayer extends Player {
   hasScored: boolean;
+  isSelected: boolean;
 }
 
 interface StateProps {
@@ -14,7 +15,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  onGradeChange: (newGrade: number) => void;
+  onClick: () => void;
 }
 
 interface OwnProps {
@@ -27,7 +28,8 @@ const mapStateToProps = (state: State, ownProps: OwnProps): StateProps => ({
 
 const getPlayer = (state: State, playerId: number) => ({
   ...state.players[playerId],
-  hasScored: hasPlayerScored(state, playerId)
+  hasScored: hasPlayerScored(state, playerId),
+  isSelected: playerId === state.selectedPlayerId
 });
 
 const hasPlayerScored = (state: State, playerId: number) => {
@@ -74,7 +76,9 @@ const mapDispatchToProps = (
   dispatch: Dispatch<Action>,
   ownProps: OwnProps
 ): DispatchProps => ({
-  onGradeChange: grade => dispatch(changePlayerGrade(ownProps.id, grade))
+  onClick: () => {
+    dispatch(selectPlayer(ownProps.id));
+  }
 });
 
 export default connect<StateProps, DispatchProps, OwnProps, State>(

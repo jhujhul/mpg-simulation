@@ -1,4 +1,5 @@
-import { ChangePlayerGradeAction, CHANGE_PLAYER_GRADE } from "../actions";
+import { Reducer } from "redux";
+import { AppAction, CHANGE_PLAYER_GRADE, SELECT_PLAYER } from "../actions";
 
 export enum PlayerPosition {
   Goalkeeper = "G",
@@ -23,6 +24,7 @@ interface Team {
 export interface State {
   players: { [key: number]: Player };
   teams: { [key: number]: Team };
+  selectedPlayerId: number | null;
 }
 
 const getPoste = (i: number) => {
@@ -44,13 +46,14 @@ const getPoste = (i: number) => {
 const getinitialState = (): State => {
   const state: State = {
     teams: {},
-    players: {}
+    players: {},
+    selectedPlayerId: null
   };
   const teamsId = [1, 2];
   teamsId.forEach(id => {
     state.teams[id] = {
       id,
-      name: id.toString(),
+      name: "team-" + id.toString(),
       players: []
     };
     for (let i = 1; i <= 11; i++) {
@@ -71,10 +74,7 @@ const getinitialState = (): State => {
 const initialState = getinitialState();
 console.log("initialState", initialState);
 
-const reducer = (
-  state: State = initialState,
-  action: ChangePlayerGradeAction
-): State => {
+const reducer: Reducer<State, AppAction> = (state = initialState, action) => {
   switch (action.type) {
     case CHANGE_PLAYER_GRADE: {
       const { grade, playerId } = action;
@@ -88,6 +88,12 @@ const reducer = (
             grade
           }
         }
+      };
+    }
+    case SELECT_PLAYER: {
+      return {
+        ...state,
+        selectedPlayerId: action.playerId
       };
     }
     default:

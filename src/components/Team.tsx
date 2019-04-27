@@ -14,10 +14,11 @@ const Team: React.FunctionComponent<TeamProps> = props => {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: id === 1 ? "row" : "row-reverse",
-        alignItems: "center"
+        flexDirection: id === 1 ? "row" : "row-reverse"
       }}
+      className={`flex items-center bg-green-light ${
+        id === 1 ? "border-r" : "border-l"
+      }`}
     >
       {
         <PlayersLine
