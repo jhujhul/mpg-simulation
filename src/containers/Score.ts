@@ -3,18 +3,26 @@ import { ComponentProps } from "react";
 
 import { State } from "../reducers";
 import ScoreComponent from "../components/Score";
+import {
+  getHomeTeam,
+  getAwayTeam,
+  getHomeTeamGoals,
+  getAwayTeamGoals
+} from "../selectors";
 
 const mapStateToProps = (
   state: State
-): ComponentProps<typeof ScoreComponent> => ({
-  team1: {
-    name: state.teams[1].name,
-    goals: 2
-  },
-  team2: {
-    name: state.teams[2].name,
-    goals: 1
-  }
-});
+): ComponentProps<typeof ScoreComponent> => {
+  return {
+    homeTeam: {
+      name: getHomeTeam(state).name,
+      goals: getHomeTeamGoals(state)
+    },
+    awayTeam: {
+      name: getAwayTeam(state).name,
+      goals: getAwayTeamGoals(state)
+    }
+  };
+};
 
 export default connect(mapStateToProps)(ScoreComponent);

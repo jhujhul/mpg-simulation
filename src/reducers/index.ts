@@ -15,10 +15,11 @@ export interface Player {
   grade: number;
 }
 
-interface Team {
+export interface Team {
   id: number;
   name: string;
   players: number[];
+  isHome: boolean;
 }
 
 export interface State {
@@ -54,14 +55,15 @@ const getinitialState = (): State => {
     state.teams[id] = {
       id,
       name: "team-" + id.toString(),
-      players: []
+      players: [],
+      isHome: id === 1
     };
     for (let i = 1; i <= 11; i++) {
       const playerId = id * 100 + i;
       state.players[playerId] = {
         id: playerId,
         name: playerId.toString(),
-        grade: 5,
+        grade: 6,
         position: getPoste(i)
       };
       state.teams[id].players.push(playerId);
@@ -72,7 +74,6 @@ const getinitialState = (): State => {
 };
 
 const initialState = getinitialState();
-console.log("initialState", initialState);
 
 const reducer: Reducer<State, AppAction> = (state = initialState, action) => {
   switch (action.type) {

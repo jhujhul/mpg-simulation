@@ -1,3 +1,5 @@
+import { ActionCreator } from "redux";
+
 export const CHANGE_PLAYER_GRADE = "CHANGE_PLAYER_GRADE";
 export const SELECT_PLAYER = "SELECT_PLAYER";
 export const UNKNOWN_ACTION = "UNKNOWN_ACTION";
@@ -24,16 +26,18 @@ export type AppAction =
   | SelectPlayerAction
   | UnknownAction;
 
-export const changePlayerGrade = (
+export const changePlayerGrade: ActionCreator<ChangePlayerGradeAction> = (
   playerId: number,
   grade: number
-): ChangePlayerGradeAction => ({
+) => ({
   type: CHANGE_PLAYER_GRADE,
   playerId,
   grade
 });
 
-export const selectPlayer = (playerId: number): SelectPlayerAction => ({
+export const selectPlayer: ActionCreator<SelectPlayerAction> = (
+  playerId: number
+) => ({
   type: SELECT_PLAYER,
   playerId
 });

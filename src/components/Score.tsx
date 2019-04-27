@@ -5,19 +5,19 @@ interface TeamWithGoals {
   goals: number;
 }
 interface ScoreProps {
-  team1: TeamWithGoals;
-  team2: TeamWithGoals;
+  homeTeam: TeamWithGoals;
+  awayTeam: TeamWithGoals;
 }
 const Score: React.FunctionComponent<ScoreProps> = props => {
-  const { team1, team2 } = props;
+  const { homeTeam, awayTeam } = props;
 
   return (
     <div className="text-center">
-      {team1.name}{" "}
+      {homeTeam.name}{" "}
       <span className="text-3xl text-blue-darker">
-        {team1.goals} - {team2.goals}
+        {homeTeam.goals} - {awayTeam.goals}
       </span>{" "}
-      {team2.name}
+      {awayTeam.name}
     </div>
   );
 };
