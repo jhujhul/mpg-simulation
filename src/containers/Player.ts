@@ -4,12 +4,18 @@ import { Dispatch, Action } from "redux";
 import { State, Player } from "../reducers";
 import PlayerComponent from "../components/Player";
 import { selectPlayer } from "../actions";
-import { hasPlayerScored, getPlayer, isPlayerSelected } from "../selectors";
+import {
+  hasPlayerScored,
+  getPlayer,
+  isPlayerSelected,
+  isPlayerPlayingForHomeTeam
+} from "../selectors";
 
 interface StateProps {
   player: Player;
   isSelected: boolean;
   hasScored: boolean;
+  isPlayingForHomeTeam: boolean;
 }
 
 interface DispatchProps {
@@ -26,7 +32,8 @@ const mapStateToProps = (state: State, ownProps: OwnProps) => {
   return {
     player: getPlayer(state, playerId),
     hasScored: hasPlayerScored(state, playerId),
-    isSelected: isPlayerSelected(state, playerId)
+    isSelected: isPlayerSelected(state, playerId),
+    isPlayingForHomeTeam: isPlayerPlayingForHomeTeam(state, playerId)
   };
 };
 

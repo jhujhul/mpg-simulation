@@ -8,20 +8,40 @@ export const getAwayTeam = (state: State): Team => {
   return Object.values(state.teams).find(team => !team.isHome) as Team;
 };
 
+export const getTeamById = (state: State, id: number): Team => state.teams[id];
+
+export const getTeamGoalsById = (state: State, id: number): number => {
+  // const team = getTeamById(state, id);
+  // return getTeamGoals(state, team);
+  return 0;
+};
+
 export const getHomeTeamGoals = (state: State): number => {
-  const homeTeam = getHomeTeam(state);
-  return getTeamGoals(state, homeTeam);
+  const team = getHomeTeam(state);
+  const enemyTeam = getAwayTeam(state);
+
+  return getTeamGoals(state, team, enemyTeam);
 };
 
 export const getAwayTeamGoals = (state: State): number => {
-  const awayTeam = getAwayTeam(state);
-  return getTeamGoals(state, awayTeam);
+  const team = getAwayTeam(state);
+  const enemyTeam = getHomeTeam(state);
+
+  return getTeamGoals(state, team, enemyTeam);
 };
 
-const getTeamGoals = (state: State, team: Team): number => {
-  return team.players
+const getTeamGoals = (state: State, team: Team, enemyTeam: Team): number => {
+  const mpgGoals = team.players
     .map(playerId => hasPlayerScored(state, playerId))
     .reduce((acc, hasPlayerScored) => acc + Number(hasPlayerScored), 0);
+  const realGoals = team.players
+    .map(playerId => getPlayer(state, playerId).goals)
+    .reduce((acc, goals) => acc + goals, 0);
+  const ownGoalsFromEnemyTeam = enemyTeam.players
+    .map(playerId => getPlayer(state, playerId).ownGoals)
+    .reduce((acc, ownGoals) => acc + ownGoals, 0);
+
+  return mpgGoals + realGoals + ownGoalsFromEnemyTeam;
 };
 
 export const getPlayer = (state: State, playerId: number) =>
@@ -30,11 +50,19 @@ export const getPlayer = (state: State, playerId: number) =>
 export const isPlayerSelected = (state: State, playerId: number) =>
   playerId === state.selectedPlayerId;
 
+export const isPlayerPlayingForHomeTeam = (state: State, playerId: number) => {
+  const homeTeam = getHomeTeam(state);
+  return homeTeam.players.includes(playerId);
+};
+
 export const hasPlayerScored = (state: State, playerId: number) => {
   const player = getPlayer(state, playerId);
-  const homeTeam = getHomeTeam(state);
-  const awayTeam = getAwayTeam(state);
-  if (player.position === PlayerPosition.Goalkeeper || player.grade < 5.5) {
+
+  if (
+    player.position === PlayerPosition.Goalkeeper ||
+    player.grade < 5 ||
+    player.goals > 0
+  ) {
     return false;
   }
 
@@ -57,6 +85,8 @@ export const hasPlayerScored = (state: State, playerId: number) => {
   };
   const positionListToPass: PlayerPosition[] =
     positionToPositionListToPassDico[player.position];
+  const homeTeam = getHomeTeam(state);
+  const awayTeam = getAwayTeam(state);
   const isPlayerPlayingHome = homeTeam.players.includes(player.id);
   const enemyTeam = isPlayerPlayingHome ? awayTeam : homeTeam;
 

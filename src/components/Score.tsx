@@ -12,12 +12,16 @@ const Score: React.FunctionComponent<ScoreProps> = props => {
   const { homeTeam, awayTeam } = props;
 
   return (
-    <div className="text-center">
-      {homeTeam.name}{" "}
-      <span className="text-3xl text-blue-darker">
-        {homeTeam.goals} - {awayTeam.goals}
-      </span>{" "}
-      {awayTeam.name}
+    <div className="flex w-full">
+      <div className="flex justify-end flex-1 text-right bg-indigo-400 p-2 text-white text-lg">
+        <span className="self-end">{homeTeam.name}</span>
+      </div>
+      <div className="text-4xl text-gray-800">
+        {homeTeam.goals}-{awayTeam.goals}
+      </div>
+      <div className="flex flex-1 bg-red-400 p-2 text-white text-lg">
+        <span className="self-end">{awayTeam.name}</span>
+      </div>
     </div>
   );
 };

@@ -8,7 +8,7 @@ const App: React.FunctionComponent = () => {
   return (
     <div>
       <Score />
-      <div className="App overflow-x-scroll" style={{ display: "flex" }}>
+      <div className="flex overflow-x-auto mb-2">
         <Team id={1} />
         <Team id={2} />
       </div>

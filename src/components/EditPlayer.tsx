@@ -1,63 +1,109 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Player, State } from "../reducers";
-import { changePlayerGrade } from "../actions";
+import {
+  changePlayerGrade,
+  changePlayerGoals,
+  changePlayerOwnGoals
+} from "../actions";
+import IncrementInput from "./IncrementInput";
 
 interface EditPlayerProps {
   player: Player | null;
   changePlayerGrade: (playerId: number, grade: number) => void;
+  changePlayerGoals: (playerId: number, goals: number) => void;
+  changePlayerOwnGoals: (playerId: number, ownGoals: number) => void;
 }
 const EditPlayer: React.FunctionComponent<EditPlayerProps> = props => {
-  const { player, changePlayerGrade } = props;
+  const {
+    player,
+    changePlayerGrade,
+    changePlayerGoals,
+    changePlayerOwnGoals
+  } = props;
 
   if (player === null) {
     return null;
   }
 
-  const [gradeLocal, setGradeLocal] = useState("");
-  useEffect(() => {
-    setGradeLocal(player.grade.toString());
-  }, [player.id]);
+  const handleGradeChange = (grade: number) => {
+    changePlayerGrade(player.id, grade);
+  };
 
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-    const numericValue = parseFloat(value);
+  const handleGoalsChange = (goals: number) => {
+    changePlayerGoals(player.id, goals);
+  };
 
-    if (numericValue < 0 || numericValue > 10) {
-      return;
-    }
-
-    setGradeLocal(value);
-    if (!isNaN(numericValue)) {
-      changePlayerGrade(player.id, numericValue);
-    }
+  const handleOwnGoalsChange = (ownGoals: number) => {
+    changePlayerOwnGoals(player.id, ownGoals);
   };
 
   return (
-    <div>
-      <label htmlFor="gradeInput">Note du joueur:</label>
-      <input
-        id="gradeInput"
-        type="number"
-        min="0"
-        max="10"
-        step="1"
-        value={gradeLocal}
-        onChange={handleChange}
-      />
+    <div className="w-full">
+      <div className="flex items-center mb-1">
+        <div className="w-1/4">
+          <label className="block text-gray-500 font-bold text-right mb-0 pr-4">
+            Note
+          </label>
+        </div>
+        <div className="w-3/4">
+          <IncrementInput
+            value={player.grade}
+            min={0}
+            max={10}
+            step={0.5}
+            onChange={handleGradeChange}
+          />
+        </div>
+      </div>
+      <div className="flex items-center mb-1">
+        <div className="w-1/4">
+          <label className="block text-gray-500 font-bold text-right mb-0 pr-4">
+            Buts
+          </label>
+        </div>
+        <div className="w-3/4">
+          <IncrementInput
+            value={player.goals}
+            min={0}
+            max={5}
+            step={1}
+            onChange={handleGoalsChange}
+          />
+        </div>
+      </div>
+      <div className="flex items-center mb-1">
+        <div className="w-1/4">
+          <label className="block text-gray-500 font-bold text-right mb-0 pr-4">
+            CSC
+          </label>
+        </div>
+        <div className="w-3/4">
+          <IncrementInput
+            value={player.ownGoals}
+            min={0}
+            max={5}
+            step={1}
+            onChange={handleOwnGoalsChange}
+          />
+        </div>
+      </div>
     </div>
   );
 };
 
 const mapStateToProps = (state: State) => {
   const { selectedPlayerId } = state;
+
   return {
     player: selectedPlayerId === null ? null : state.players[selectedPlayerId]
   };
 };
 
 const mapDispatchToProps = {
-  changePlayerGrade
+  changePlayerGrade,
+  changePlayerGoals,
+  changePlayerOwnGoals
 };
 
 export default connect(
