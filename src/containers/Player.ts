@@ -1,7 +1,5 @@
 import { connect } from "react-redux";
 import { Dispatch, Action } from "redux";
-
-import { State, Player } from "../reducers";
 import PlayerComponent from "../components/Player";
 import { selectPlayer } from "../actions";
 import {
@@ -10,6 +8,8 @@ import {
   isPlayerSelected,
   isPlayerPlayingForHomeTeam
 } from "../selectors";
+import { Player } from "../reducers/players";
+import { AppState } from "../reducers";
 
 interface StateProps {
   player: Player;
@@ -26,7 +26,7 @@ interface OwnProps {
   id: number;
 }
 
-const mapStateToProps = (state: State, ownProps: OwnProps) => {
+const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
   const playerId = ownProps.id;
 
   return {
@@ -46,7 +46,7 @@ const mapDispatchToProps = (
   }
 });
 
-export default connect<StateProps, DispatchProps, OwnProps, State>(
+export default connect<StateProps, DispatchProps, OwnProps, AppState>(
   mapStateToProps,
   mapDispatchToProps
 )(PlayerComponent);

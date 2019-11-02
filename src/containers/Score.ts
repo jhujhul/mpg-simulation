@@ -1,7 +1,5 @@
 import { connect } from "react-redux";
 import { ComponentProps } from "react";
-
-import { State } from "../reducers";
 import ScoreComponent from "../components/Score";
 import {
   getHomeTeam,
@@ -9,9 +7,10 @@ import {
   getHomeTeamGoals,
   getAwayTeamGoals
 } from "../selectors";
+import { AppState } from "../reducers";
 
 const mapStateToProps = (
-  state: State
+  state: AppState
 ): ComponentProps<typeof ScoreComponent> => {
   return {
     homeTeam: {

@@ -1,8 +1,6 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import classNames from "classnames";
-
-import jerseyIcon from "../assets/football-jersey.svg";
-import { Player as PlayerModel } from "../reducers";
+import { Player as PlayerModel } from "../reducers/players";
 
 export interface PlayerProps {
   player: PlayerModel;

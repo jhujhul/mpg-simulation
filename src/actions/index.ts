@@ -1,9 +1,11 @@
 import { ActionCreator } from "redux";
+import { Formation } from "../reducers/teams";
 
 export const CHANGE_PLAYER_GRADE = "CHANGE_PLAYER_GRADE";
 export const CHANGE_PLAYER_GOALS = "CHANGE_PLAYER_GOALS";
 export const CHANGE_PLAYER_OWN_GOALS = "CHANGE_PLAYER_OWN_GOALS";
 export const SELECT_PLAYER = "SELECT_PLAYER";
+export const SELECT_FORMATION = "SELECT_FORMATION";
 
 export const UNKNOWN_ACTION = "UNKNOWN_ACTION";
 
@@ -30,6 +32,12 @@ interface SelectPlayerAction {
   playerId: number;
 }
 
+export interface SelectFormationAction {
+  type: typeof SELECT_FORMATION;
+  teamId: number;
+  formation: Formation;
+}
+
 // Just an action to represent all the actions used by redux and other librairies
 // that reducers also have to handle (with default in switch)
 interface UnknownAction {
@@ -41,6 +49,7 @@ export type AppAction =
   | ChangePlayerGoalsAction
   | ChangePlayerOwnGoalsAction
   | SelectPlayerAction
+  | SelectFormationAction
   | UnknownAction;
 
 export const changePlayerGrade: ActionCreator<ChangePlayerGradeAction> = (
@@ -75,4 +84,13 @@ export const selectPlayer: ActionCreator<SelectPlayerAction> = (
 ) => ({
   type: SELECT_PLAYER,
   playerId
+});
+
+export const selectFormation: ActionCreator<SelectFormationAction> = (
+  teamId: number,
+  formation: Formation
+) => ({
+  type: SELECT_FORMATION,
+  teamId,
+  formation
 });

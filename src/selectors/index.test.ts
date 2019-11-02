@@ -1,7 +1,9 @@
-import { State, Player, PlayerPosition, Team } from "../reducers";
 import { getHomeTeamGoals, getAwayTeamGoals } from ".";
+import { AppState } from "../reducers";
+import { PlayerPosition, Player } from "../reducers/players";
+import { Team } from "../reducers/teams";
 
-describe("Test", () => {
+describe("Selectors", () => {
   type SimplifiedPlayer = [number, number?, number?];
   type SimplifiedTeam = [
     SimplifiedPlayer[],
@@ -13,8 +15,8 @@ describe("Test", () => {
   const createState = (
     simplifiedHomeTeam: SimplifiedTeam,
     simplifiedAwayTeam: SimplifiedTeam
-  ): State => {
-    let state: State = {
+  ): AppState => {
+    let state: AppState = {
       players: {},
       teams: {},
       selectedPlayerId: null
@@ -31,11 +33,11 @@ describe("Test", () => {
   };
 
   const addTeamToState = (
-    state: State,
+    state: AppState,
     simplifiedTeam: SimplifiedTeam,
     id: number,
     isHomeTeam: boolean
-  ): State => {
+  ): AppState => {
     const team = createTeam(id, isHomeTeam);
     state.teams[team.id] = team;
 
@@ -48,7 +50,8 @@ describe("Test", () => {
         state.players[playerId] = createPlayer(
           simplifiedPlayer,
           playerId,
-          playerPosition
+          playerPosition,
+          id
         );
         playerIndex++;
       });
@@ -85,7 +88,8 @@ describe("Test", () => {
   const createPlayer = (
     simplifiedPlayer: SimplifiedPlayer,
     id: number,
-    position: PlayerPosition
+    position: PlayerPosition,
+    teamId: number
   ): Player => {
     return {
       id,
@@ -93,7 +97,8 @@ describe("Test", () => {
       position,
       grade: simplifiedPlayer[0],
       goals: simplifiedPlayer[1] || 0,
-      ownGoals: simplifiedPlayer[2] || 0
+      ownGoals: simplifiedPlayer[2] || 0,
+      teamId
     };
   };
 
@@ -120,10 +125,9 @@ describe("Test", () => {
         [[5]]
       ];
 
-      const [home, away] = getScore(homeTeam, awayTeam);
+      const score = getScore(homeTeam, awayTeam);
 
-      expect(home).toBe(0);
-      expect(away).toBe(0);
+      expect(score).toEqual([0, 0]);
     });
 
     it("should get right score with real and own goals", () => {
@@ -140,10 +144,9 @@ describe("Test", () => {
         [[4]]
       ];
 
-      const [home, away] = getScore(homeTeam, awayTeam);
+      const score = getScore(homeTeam, awayTeam);
 
-      expect(home).toBe(5);
-      expect(away).toBe(2);
+      expect(score).toEqual([5, 2]);
     });
   });
 });

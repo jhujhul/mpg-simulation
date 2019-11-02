@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Player, State } from "../reducers";
 import {
   changePlayerGrade,
   changePlayerGoals,
   changePlayerOwnGoals
 } from "../actions";
 import IncrementInput from "./IncrementInput";
+import { Player } from "../reducers/players";
+import { AppState } from "../reducers";
 
 interface EditPlayerProps {
   player: Player | null;
@@ -92,7 +93,7 @@ const EditPlayer: React.FunctionComponent<EditPlayerProps> = props => {
   );
 };
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: AppState) => {
   const { selectedPlayerId } = state;
 
   return {
