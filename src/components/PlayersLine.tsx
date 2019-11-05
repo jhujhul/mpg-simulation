@@ -9,7 +9,7 @@ const PlayersLine: React.FunctionComponent<PlayersLineProps> = props => {
   const { playerIds } = props;
 
   return (
-    <div>
+    <div className="flex">
       {playerIds.map(playerId => (
         <Player id={playerId} key={playerId} />
       ))}

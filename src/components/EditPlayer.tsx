@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import {
   changePlayerGrade,
   changePlayerGoals,
-  changePlayerOwnGoals
+  changePlayerOwnGoals,
+  closePlayerEdition
 } from "../actions";
 import IncrementInput from "./IncrementInput";
 import { Player } from "../reducers/players";
@@ -22,6 +23,7 @@ const EditPlayer: React.FunctionComponent<EditPlayerProps> = props => {
     changePlayerGoals,
     changePlayerOwnGoals
   } = props;
+  const dispatch = useDispatch();
 
   if (player === null) {
     return null;
@@ -39,8 +41,18 @@ const EditPlayer: React.FunctionComponent<EditPlayerProps> = props => {
     changePlayerOwnGoals(player.id, ownGoals);
   };
 
+  const handleCloseClick = () => {
+    dispatch(closePlayerEdition());
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full inset-x-0 bottom-0 fixed z-10 bg-gray-600">
+      <span
+        onClick={handleCloseClick}
+        className="absolute top-0 right-0 mt-2 mr-2"
+      >
+        x
+      </span>
       <div className="flex items-center mb-1">
         <div className="w-1/4">
           <label className="block text-gray-500 font-bold text-right mb-0 pr-4">

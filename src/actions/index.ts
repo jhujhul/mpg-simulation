@@ -5,6 +5,7 @@ export const CHANGE_PLAYER_GRADE = "CHANGE_PLAYER_GRADE";
 export const CHANGE_PLAYER_GOALS = "CHANGE_PLAYER_GOALS";
 export const CHANGE_PLAYER_OWN_GOALS = "CHANGE_PLAYER_OWN_GOALS";
 export const SELECT_PLAYER = "SELECT_PLAYER";
+export const CLOSE_PLAYER_EDITION = "CLOSE_PLAYER_EDITION";
 export const SELECT_FORMATION = "SELECT_FORMATION";
 
 export const UNKNOWN_ACTION = "UNKNOWN_ACTION";
@@ -32,6 +33,10 @@ interface SelectPlayerAction {
   playerId: number;
 }
 
+interface ClosePlayerEditionAction {
+  type: typeof CLOSE_PLAYER_EDITION;
+}
+
 export interface SelectFormationAction {
   type: typeof SELECT_FORMATION;
   teamId: number;
@@ -49,6 +54,7 @@ export type AppAction =
   | ChangePlayerGoalsAction
   | ChangePlayerOwnGoalsAction
   | SelectPlayerAction
+  | ClosePlayerEditionAction
   | SelectFormationAction
   | UnknownAction;
 
@@ -84,6 +90,12 @@ export const selectPlayer: ActionCreator<SelectPlayerAction> = (
 ) => ({
   type: SELECT_PLAYER,
   playerId
+});
+
+export const closePlayerEdition: ActionCreator<
+  ClosePlayerEditionAction
+> = () => ({
+  type: CLOSE_PLAYER_EDITION
 });
 
 export const selectFormation: ActionCreator<SelectFormationAction> = (

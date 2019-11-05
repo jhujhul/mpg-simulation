@@ -1,91 +1,81 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import classNames from "classnames";
-
+import { useSelector, useDispatch } from "react-redux";
 import PlayersLine from "./PlayersLine";
 import { Player, PlayerPosition } from "../reducers/players";
 import { Formation } from "../reducers/teams";
+import TeamFormationSelect from "./TeamFormationSelect";
+import { AppState } from "../reducers";
+import { selectFormation } from "../actions";
 
 interface TeamProps {
   id: number;
-  players: Player[];
-  goals: number;
-  name: string;
-  formation: Formation;
-  onFormationChange: (formation: Formation) => void;
+  isHomeTeam: boolean;
 }
-
 const Team: React.FunctionComponent<TeamProps> = props => {
-  const { id, players, goals, name, formation, onFormationChange } = props;
-  const isTeamOnLeftSide = id === 1;
+  const { id, isHomeTeam } = props;
+
+  const players = useSelector<AppState, Player[]>(state =>
+    getPlayersByTeamId(state, id)
+  );
+  const formation = useSelector<AppState, Formation>(state =>
+    getTeamFormation(state, id)
+  );
+  const dispatch = useDispatch();
+
   const teamClass = classNames(
     "flex",
+    "relative",
     "items-center",
-    "bg-gray-200",
+    "bg-green-300",
     "border-white",
     "py-1",
     {
-      "border-r": isTeamOnLeftSide,
-      "border-l": !isTeamOnLeftSide,
-      "flex-row": isTeamOnLeftSide,
-      "flex-row-reverse": !isTeamOnLeftSide
+      "border-b": isHomeTeam,
+      "border-t": !isHomeTeam,
+      "flex-col": isHomeTeam,
+      "flex-col-reverse": !isHomeTeam
     }
   );
-  const scoreClass = classNames(
-    "flex",
-    "justify-end",
-    "items-baseline",
-    "mb-2",
-    {
-      "flex-row": isTeamOnLeftSide,
-      "flex-row-reverse": !isTeamOnLeftSide
-    }
-  );
+  const selectClass = classNames("absolute", "left-0", "ml-2", {
+    "top-0": isHomeTeam,
+    "bottom-0": !isHomeTeam,
+    "mt-2": isHomeTeam,
+    "mb-2": !isHomeTeam
+  });
 
-  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    onFormationChange(event.target.value as Formation);
+  const handleFormationChange = (newFormation: Formation) => {
+    dispatch(selectFormation(id, newFormation));
   };
 
   return (
-    <div>
-      <div className={scoreClass}>
-        <div className="uppercase text-sm text-gray-600">{name}</div>
-        <div className="text-5xl mx-2">{id}</div>
+    <div className={teamClass}>
+      <div className={selectClass}>
+        <TeamFormationSelect
+          formation={formation}
+          onFormationChange={handleFormationChange}
+        />
       </div>
-      <select value={formation} onChange={handleChange}>
-        {Object.values(Formation).map(f => (
-          <option value={f} key={f}>
-            {f}
-          </option>
-        ))}
-      </select>
-      <div className={teamClass}>
-        {
-          <PlayersLine
-            playerIds={getPlayerIdsByPosition(
-              players,
-              PlayerPosition.Goalkeeper
-            )}
-          />
-        }
-        {
-          <PlayersLine
-            playerIds={getPlayerIdsByPosition(players, PlayerPosition.Defender)}
-          />
-        }
-        {
-          <PlayersLine
-            playerIds={getPlayerIdsByPosition(
-              players,
-              PlayerPosition.Midfielder
-            )}
-          />
-        }
-        {
-          <PlayersLine
-            playerIds={getPlayerIdsByPosition(players, PlayerPosition.Forward)}
-          />
-        }
-      </div>
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Goalkeeper)}
+        />
+      }
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Defender)}
+        />
+      }
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Midfielder)}
+        />
+      }
+      {
+        <PlayersLine
+          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Forward)}
+        />
+      }
     </div>
   );
 };
@@ -94,5 +84,44 @@ const getPlayerIdsByPosition = (players: Player[], position: PlayerPosition) =>
   players
     .filter((player: Player) => player.position === position)
     .map(player => player.id);
+
+const getPlayersByTeamId = (state: AppState, teamId: number) =>
+  state.teams[teamId].players.map(playerId => getPlayer(state, playerId));
+
+const getPlayer = (state: AppState, playerId: number) =>
+  state.players[playerId];
+
+const getTeamFormation = (state: AppState, id: number) => {
+  const players = Object.values(state.players) as Player[];
+  const teamPlayers = players.filter(p => p.teamId === id);
+  const numberOfDefenders = teamPlayers.filter(
+    p => p.position === PlayerPosition.Defender
+  ).length;
+  const numberOfMidfielders = teamPlayers.filter(
+    p => p.position === PlayerPosition.Midfielder
+  ).length;
+
+  if (numberOfDefenders === 5) {
+    if (numberOfMidfielders === 3) {
+      return Formation.F532;
+    } else {
+      return Formation.F541;
+    }
+  } else if (numberOfDefenders === 4) {
+    if (numberOfMidfielders === 3) {
+      return Formation.F433;
+    } else if (numberOfMidfielders === 4) {
+      return Formation.F442;
+    } else {
+      return Formation.F451;
+    }
+  } else {
+    if (numberOfMidfielders === 4) {
+      return Formation.F343;
+    } else {
+      return Formation.F352;
+    }
+  }
+};
 
 export default Team;

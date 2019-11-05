@@ -1,12 +1,14 @@
 import { combineReducers } from "redux";
 import playersReducer from "./players";
 import teamsReducer from "./teams";
-import selectedPlayerIdreducer from "./selectedPlayer";
+import selectedPlayerIdReducer from "./selectedPlayer";
+import homeTeamIdReducer from "./homeTeamId";
 
 const rootReducer = combineReducers({
   players: playersReducer,
   teams: teamsReducer,
-  selectedPlayerId: selectedPlayerIdreducer
+  selectedPlayerId: selectedPlayerIdReducer,
+  homeTeamId: homeTeamIdReducer
 });
 
 export default rootReducer;

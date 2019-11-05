@@ -4,20 +4,16 @@ import { Team } from "../reducers/teams";
 import { PlayerPosition } from "../reducers/players";
 
 export const getHomeTeam = (state: AppState): Team => {
-  return Object.values(state.teams).find(team => team.isHome) as Team;
+  return state.teams[state.homeTeamId];
 };
 export const getAwayTeam = (state: AppState): Team => {
-  return Object.values(state.teams).find(team => !team.isHome) as Team;
+  const awayTeamId = getAwayTeamId(state);
+
+  return state.teams[awayTeamId];
 };
 
 export const getTeamById = (state: AppState, id: number): Team =>
   state.teams[id];
-
-export const getTeamGoalsById = (state: AppState, id: number): number => {
-  // const team = getTeamById(state, id);
-  // return getTeamGoals(state, team);
-  return 0;
-};
 
 export const getHomeTeamGoals = (state: AppState): number => {
   const team = getHomeTeam(state);
@@ -127,3 +123,6 @@ const getAverageGradeByTeamAndPosition = (
     .map(p => p.grade);
   return average(notesArray);
 };
+
+export const getAwayTeamId = (state: AppState): number =>
+  state.homeTeamId === 1 ? 2 : 1;
