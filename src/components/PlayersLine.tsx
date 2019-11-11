@@ -9,7 +9,7 @@ const PlayersLine: React.FunctionComponent<PlayersLineProps> = props => {
   const { playerIds } = props;
 
   return (
-    <div className="flex">
+    <div className="flex justify-center w-full">
       {playerIds.map(playerId => (
         <Player id={playerId} key={playerId} />
       ))}

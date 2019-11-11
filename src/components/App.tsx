@@ -13,7 +13,7 @@ const App: React.FunctionComponent = () => {
   return (
     <div>
       <Score />
-      <div className="my-2">
+      <div className="">
         <Team id={homeTeamId} isHomeTeam={true} />
         <Team id={awayTeamId} isHomeTeam={false} />
       </div>

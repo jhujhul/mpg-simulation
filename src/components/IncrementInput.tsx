@@ -1,4 +1,5 @@
 import React from "react";
+import RoundedButton from "./RoundedButton";
 
 interface Props {
   value: number;
@@ -28,24 +29,19 @@ const IncrementInput: React.FunctionComponent<Props> = props => {
 
   return (
     <div className="flex items-center">
-      <button
+      <RoundedButton
+        text="-"
+        disabled={value === min}
         onClick={handleMinusClick}
-        style={{ touchAction: "manipulation" }}
-        className="font-bold focus:outline-none mx-2 rounded-full h-10 w-10 flex items-center justify-center bg-gray-200"
-      >
-        -
-      </button>
-      <div className="w-12 bg-gray-200 rounded py-2 px-3 text-gray-700">
+      />
+      <div className="w-10 py-2 text-center mx-2 text-gray-700 font-bold">
         {value}
       </div>
-      {/* <input type="number" value={0} /> */}
-      <button
+      <RoundedButton
+        text="+"
+        disabled={value === max}
         onClick={handlePlusClick}
-        style={{ touchAction: "manipulation" }}
-        className="font-bold focus:outline-none mx-2 rounded-full h-10 w-10 flex items-center justify-center bg-gray-200"
-      >
-        +
-      </button>
+      />
     </div>
   );
 };

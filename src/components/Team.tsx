@@ -27,7 +27,7 @@ const Team: React.FunctionComponent<TeamProps> = props => {
     "flex",
     "relative",
     "items-center",
-    "bg-green-300",
+    "bg-green-200",
     "border-white",
     "py-1",
     {

@@ -29,11 +29,11 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
     }
   );
   const playerGradeContainerClass = classNames(
-    "h-8 w-8 flex items-center justify-center mb-1 rounded",
+    "h-8 w-8 flex items-center justify-center mb-1 rounded shadow-md",
     {
-      "bg-indigo-600": isPlayingForHomeTeam && !isSelected,
+      "bg-blue-600": isPlayingForHomeTeam && !isSelected,
       "bg-red-600": !isPlayingForHomeTeam && !isSelected,
-      "bg-indigo-800": isPlayingForHomeTeam && isSelected,
+      "bg-blue-800": isPlayingForHomeTeam && isSelected,
       "bg-red-800": !isPlayingForHomeTeam && isSelected
     }
   );
@@ -41,7 +41,7 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
     "font-bold": isSelected
   });
   const playerContainerClass = classNames(
-    "mx-1 my-1 cursor-pointer w-16 h-16 flex flex-col items-center relative"
+    "mx-1 my-1 cursor-pointer w-1/5 h-16 flex flex-col items-center relative"
   );
   const playerSkewAngle = isPlayingForHomeTeam
     ? HOME_PLAYER_SKEW_ANGLE
@@ -59,26 +59,30 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
         >
           {player.grade}
         </span>
-      </div>
-      <div className="absolute top-0 right-0 w-3">
-        {hasScored && (
-          <div className="rounded-full h-3 w-3 bg-green-600 border border-solid border-white" />
-        )}
-        <div className="flex">
-          {[...Array(player.goals)].map((e, i) => (
-            <div
-              key={i}
-              className="rounded-full h-3 w-3 bg-indigo-600 flex-shrink-0 -mr-1 border border-solid border-white"
-            />
-          ))}
-        </div>
-        <div className="flex">
-          {[...Array(player.ownGoals)].map((e, i) => (
-            <div
-              key={i}
-              className="rounded-full h-3 w-3 bg-red-600 flex-shrink-0 -mr-1 border border-solid border-white"
-            />
-          ))}
+        <div className="absolute top-0 right-0 w-3">
+          {hasScored && (
+            <div className="rounded-full h-3 w-3 bg-green-600 border border-solid border-white" />
+          )}
+          {player.goals > 0 && (
+            <div className="flex">
+              {[...Array(player.goals)].map((e, i) => (
+                <div
+                  key={i}
+                  className="rounded-full h-3 w-3 bg-indigo-600 flex-shrink-0 -mr-1 border border-solid border-white"
+                />
+              ))}
+            </div>
+          )}
+          {player.ownGoals > 0 && (
+            <div className="flex">
+              {[...Array(player.ownGoals)].map((e, i) => (
+                <div
+                  key={i}
+                  className="rounded-full h-3 w-3 bg-red-600 flex-shrink-0 -mr-1 border border-solid border-white"
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <div className={playerNameClass}>{player.name}</div>
