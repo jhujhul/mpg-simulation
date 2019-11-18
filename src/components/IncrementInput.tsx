@@ -34,7 +34,7 @@ const IncrementInput: React.FunctionComponent<Props> = props => {
         disabled={value === min}
         onClick={handleMinusClick}
       />
-      <div className="w-10 py-2 text-center mx-2 text-gray-700 font-bold">
+      <div className="w-8 py-2 text-center text-gray-700 font-bold">
         {value}
       </div>
       <RoundedButton

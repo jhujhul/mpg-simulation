@@ -19,14 +19,14 @@ describe("Selectors", () => {
     let state: AppState = {
       players: {},
       teams: {},
-      selectedPlayerId: null
+      selectedPlayerId: null,
+      homeTeamId: 1
     };
-    state = addTeamToState(state, simplifiedHomeTeam, 1, true);
+    state = addTeamToState(state, simplifiedHomeTeam, 1);
     state = addTeamToState(
       state,
       simplifiedAwayTeam.reverse() as SimplifiedTeam,
-      2,
-      false
+      2
     );
 
     return state;
@@ -35,10 +35,9 @@ describe("Selectors", () => {
   const addTeamToState = (
     state: AppState,
     simplifiedTeam: SimplifiedTeam,
-    id: number,
-    isHomeTeam: boolean
+    id: number
   ): AppState => {
-    const team = createTeam(id, isHomeTeam);
+    const team = createTeam(id);
     state.teams[team.id] = team;
 
     let playerIndex = 0;
@@ -60,14 +59,13 @@ describe("Selectors", () => {
     return state;
   };
 
-  const createTeam = (id: number, isHomeTeam: boolean): Team => {
+  const createTeam = (id: number): Team => {
     const players = Array.from(Array(11)).map((v, i) => id * 100 + 1 + i);
 
     return {
       id,
       name: id.toString(),
-      players,
-      isHome: isHomeTeam
+      players
     };
   };
 
@@ -112,12 +110,14 @@ describe("Selectors", () => {
     };
 
     it("should get right score when all players have 5", () => {
+      // prettier-ignore
       const homeTeam: SimplifiedTeam = [
         [[5]],
         [[5], [5], [5], [5]],
         [[5], [5], [5], [5]],
         [[5], [5]]
       ];
+      // prettier-ignore
       const awayTeam: SimplifiedTeam = [
         [[5], [5]],
         [[5], [5], [5], [5]],
@@ -131,12 +131,14 @@ describe("Selectors", () => {
     });
 
     it("should get right score with real and own goals", () => {
+      // prettier-ignore
       const homeTeam: SimplifiedTeam = [
         [[4]],
         [[4], [6.5], [5]],
         [[4.5], [4.5], [4.5], [6.5, 1]],
         [[6, 1], [5.5, 1], [6.5, 1]]
       ];
+      // prettier-ignore
       const awayTeam: SimplifiedTeam = [
         [[6.5, 1], [5.5], [4]],
         [[2.5, 0, 1], [2.5], [4.5], [2.5]],

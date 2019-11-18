@@ -3,35 +3,32 @@ import { AppState } from "../reducers";
 import { Team } from "../reducers/teams";
 import { PlayerPosition } from "../reducers/players";
 
+export const getAwayTeamId = (state: AppState): number =>
+  state.homeTeamId === 1 ? 2 : 1;
+
 export const getHomeTeam = (state: AppState): Team => {
   return state.teams[state.homeTeamId];
 };
+
 export const getAwayTeam = (state: AppState): Team => {
   const awayTeamId = getAwayTeamId(state);
 
   return state.teams[awayTeamId];
 };
 
-export const getTeamById = (state: AppState, id: number): Team =>
-  state.teams[id];
-
 export const getHomeTeamGoals = (state: AppState): number => {
-  const team = getHomeTeam(state);
-  const enemyTeam = getAwayTeam(state);
-
-  return getTeamGoals(state, team, enemyTeam);
+  return getTeamGoals(state, true);
 };
 
 export const getAwayTeamGoals = (state: AppState): number => {
-  const team = getAwayTeam(state);
-  const enemyTeam = getHomeTeam(state);
-
-  return getTeamGoals(state, team, enemyTeam);
+  return getTeamGoals(state, false);
 };
 
-const getTeamGoals = (state: AppState, team: Team, enemyTeam: Team): number => {
+const getTeamGoals = (state: AppState, isHomeTeam: boolean): number => {
+  const team = isHomeTeam ? getHomeTeam(state) : getAwayTeam(state);
+  const enemyTeam = isHomeTeam ? getAwayTeam(state) : getHomeTeam(state);
   const mpgGoals = team.players
-    .map(playerId => hasPlayerScored(state, playerId))
+    .map(playerId => getHasPlayerScored(state, playerId))
     .reduce((acc, hasPlayerScored) => acc + Number(hasPlayerScored), 0);
   const realGoals = team.players
     .map(playerId => getPlayer(state, playerId).goals)
@@ -49,15 +46,14 @@ export const getPlayer = (state: AppState, playerId: number) =>
 export const isPlayerSelected = (state: AppState, playerId: number) =>
   playerId === state.selectedPlayerId;
 
-export const isPlayerPlayingForHomeTeam = (
+export const getIsPlayerPlayingForHomeTeam = (
   state: AppState,
   playerId: number
 ) => {
-  const homeTeam = getHomeTeam(state);
-  return homeTeam.players.includes(playerId);
+  return state.players[playerId].teamId === state.homeTeamId;
 };
 
-export const hasPlayerScored = (state: AppState, playerId: number) => {
+export const getHasPlayerScored = (state: AppState, playerId: number) => {
   const player = getPlayer(state, playerId);
 
   if (
@@ -123,6 +119,3 @@ const getAverageGradeByTeamAndPosition = (
     .map(p => p.grade);
   return average(notesArray);
 };
-
-export const getAwayTeamId = (state: AppState): number =>
-  state.homeTeamId === 1 ? 2 : 1;

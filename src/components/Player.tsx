@@ -1,6 +1,8 @@
 import React from "react";
 import classNames from "classnames";
 import { Player as PlayerModel } from "../reducers/players";
+import BallIcon from "./BallIcon";
+import PlayerGoalsList from "./PlayerGoalsList";
 
 export interface PlayerProps {
   player: PlayerModel;
@@ -29,7 +31,7 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
     }
   );
   const playerGradeContainerClass = classNames(
-    "h-8 w-8 flex items-center justify-center mb-1 rounded shadow-md",
+    "h-8 w-8 mb-1 rounded shadow-md",
     {
       "bg-blue-600": isPlayingForHomeTeam && !isSelected,
       "bg-red-600": !isPlayingForHomeTeam && !isSelected,
@@ -53,36 +55,20 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
         className={playerGradeContainerClass}
         style={{ transform: `skew(${playerSkewAngle}deg)` }}
       >
-        <span
-          className={playerGradeClass}
+        <div
+          className="w-full h-full flex items-center justify-center"
           style={{ transform: `skew(${-playerSkewAngle}deg)` }}
         >
-          {player.grade}
-        </span>
-        <div className="absolute top-0 right-0 w-3">
-          {hasScored && (
-            <div className="rounded-full h-3 w-3 bg-green-600 border border-solid border-white" />
-          )}
-          {player.goals > 0 && (
-            <div className="flex">
-              {[...Array(player.goals)].map((e, i) => (
-                <div
-                  key={i}
-                  className="rounded-full h-3 w-3 bg-indigo-600 flex-shrink-0 -mr-1 border border-solid border-white"
-                />
-              ))}
-            </div>
-          )}
-          {player.ownGoals > 0 && (
-            <div className="flex">
-              {[...Array(player.ownGoals)].map((e, i) => (
-                <div
-                  key={i}
-                  className="rounded-full h-3 w-3 bg-red-600 flex-shrink-0 -mr-1 border border-solid border-white"
-                />
-              ))}
-            </div>
-          )}
+          <span className={playerGradeClass}>{player.grade}</span>
+          <div className="absolute top-0 right-0 w-3 -mr-3">
+            {hasScored && <BallIcon color="green-700" />}
+            <PlayerGoalsList goalNumber={player.goals}>
+              <BallIcon color="indigo-600" />
+            </PlayerGoalsList>
+            <PlayerGoalsList goalNumber={player.ownGoals}>
+              <BallIcon color="red-600" />
+            </PlayerGoalsList>
+          </div>
         </div>
       </div>
       <div className={playerNameClass}>{player.name}</div>

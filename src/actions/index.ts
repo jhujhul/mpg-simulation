@@ -6,6 +6,8 @@ export const CHANGE_PLAYER_GOALS = "CHANGE_PLAYER_GOALS";
 export const CHANGE_PLAYER_OWN_GOALS = "CHANGE_PLAYER_OWN_GOALS";
 export const SELECT_PLAYER = "SELECT_PLAYER";
 export const CLOSE_PLAYER_EDITION = "CLOSE_PLAYER_EDITION";
+export const SELECT_PREVIOUS_PLAYER = "SELECT_PREVIOUS_PLAYER";
+export const SELECT_NEXT_PLAYER = "SELECT_NEXT_PLAYER";
 export const SELECT_FORMATION = "SELECT_FORMATION";
 
 export const UNKNOWN_ACTION = "UNKNOWN_ACTION";
@@ -33,6 +35,14 @@ interface SelectPlayerAction {
   playerId: number;
 }
 
+interface SelectPreviousPlayerAction {
+  type: typeof SELECT_PREVIOUS_PLAYER;
+}
+
+interface SelectNextPlayerAction {
+  type: typeof SELECT_NEXT_PLAYER;
+}
+
 interface ClosePlayerEditionAction {
   type: typeof CLOSE_PLAYER_EDITION;
 }
@@ -54,6 +64,8 @@ export type AppAction =
   | ChangePlayerGoalsAction
   | ChangePlayerOwnGoalsAction
   | SelectPlayerAction
+  | SelectPreviousPlayerAction
+  | SelectNextPlayerAction
   | ClosePlayerEditionAction
   | SelectFormationAction
   | UnknownAction;
@@ -92,9 +104,15 @@ export const selectPlayer: ActionCreator<SelectPlayerAction> = (
   playerId
 });
 
-export const closePlayerEdition: ActionCreator<
-  ClosePlayerEditionAction
-> = () => ({
+export const selectPreviousPlayer: ActionCreator<SelectPreviousPlayerAction> = () => ({
+  type: SELECT_PREVIOUS_PLAYER
+});
+
+export const selectNextPlayer: ActionCreator<SelectNextPlayerAction> = () => ({
+  type: SELECT_NEXT_PLAYER
+});
+
+export const closePlayerEdition: ActionCreator<ClosePlayerEditionAction> = () => ({
   type: CLOSE_PLAYER_EDITION
 });
 

@@ -40,7 +40,7 @@ const getPlayer = (
   name,
   grade: 6,
   position,
-  goals: 0,
+  goals: id === 111 ? 1 : 0,
   ownGoals: 0,
   teamId
 });

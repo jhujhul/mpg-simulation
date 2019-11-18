@@ -3,10 +3,10 @@ import { Dispatch, Action } from "redux";
 import PlayerComponent from "../components/Player";
 import { selectPlayer } from "../actions";
 import {
-  hasPlayerScored,
+  getHasPlayerScored,
   getPlayer,
   isPlayerSelected,
-  isPlayerPlayingForHomeTeam
+  getIsPlayerPlayingForHomeTeam
 } from "../selectors";
 import { Player } from "../reducers/players";
 import { AppState } from "../reducers";
@@ -31,9 +31,9 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 
   return {
     player: getPlayer(state, playerId),
-    hasScored: hasPlayerScored(state, playerId),
+    hasScored: getHasPlayerScored(state, playerId),
     isSelected: isPlayerSelected(state, playerId),
-    isPlayingForHomeTeam: isPlayerPlayingForHomeTeam(state, playerId)
+    isPlayingForHomeTeam: getIsPlayerPlayingForHomeTeam(state, playerId)
   };
 };
 

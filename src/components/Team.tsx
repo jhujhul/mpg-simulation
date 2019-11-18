@@ -58,21 +58,25 @@ const Team: React.FunctionComponent<TeamProps> = props => {
       </div>
       {
         <PlayersLine
+          isReverseOrder={!isHomeTeam}
           playerIds={getPlayerIdsByPosition(players, PlayerPosition.Goalkeeper)}
         />
       }
       {
         <PlayersLine
+          isReverseOrder={!isHomeTeam}
           playerIds={getPlayerIdsByPosition(players, PlayerPosition.Defender)}
         />
       }
       {
         <PlayersLine
+          isReverseOrder={!isHomeTeam}
           playerIds={getPlayerIdsByPosition(players, PlayerPosition.Midfielder)}
         />
       }
       {
         <PlayersLine
+          isReverseOrder={!isHomeTeam}
           playerIds={getPlayerIdsByPosition(players, PlayerPosition.Forward)}
         />
       }
