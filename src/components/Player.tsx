@@ -1,8 +1,10 @@
 import React from "react";
 import classNames from "classnames";
 import { Player as PlayerModel } from "../reducers/players";
-import BallIcon from "./BallIcon";
 import PlayerGoalsList from "./PlayerGoalsList";
+import MpgGoalIcon from "./MpgGoalIcon";
+import RealGoalIcon from "./RealGoalIcon";
+import OwnGoalIcon from "./OwnGoalIcon";
 
 export interface PlayerProps {
   player: PlayerModel;
@@ -61,12 +63,12 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
         >
           <span className={playerGradeClass}>{player.grade}</span>
           <div className="absolute top-0 right-0 w-3 -mr-3">
-            {hasScored && <BallIcon color="green-700" />}
+            {hasScored && <MpgGoalIcon />}
             <PlayerGoalsList goalNumber={player.goals}>
-              <BallIcon color="indigo-600" />
+              <RealGoalIcon />
             </PlayerGoalsList>
             <PlayerGoalsList goalNumber={player.ownGoals}>
-              <BallIcon color="red-600" />
+              <OwnGoalIcon />
             </PlayerGoalsList>
           </div>
         </div>

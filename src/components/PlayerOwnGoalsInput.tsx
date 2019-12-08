@@ -1,8 +1,9 @@
 import React from "react";
-import PlayerPropertyInput from "./PlayerPropertyInput";
 import { useSelector, useDispatch } from "react-redux";
+import PlayerPropertyInput from "./PlayerPropertyInput";
 import { AppState } from "../reducers";
-import { changePlayerGoals, changePlayerOwnGoals } from "../actions";
+import { changePlayerOwnGoals } from "../actions";
+import OwnGoalIcon from "./OwnGoalIcon";
 
 interface Props {
   playerId: number;
@@ -21,6 +22,7 @@ const PlayerOwnGoalsInput: React.FunctionComponent<Props> = props => {
   return (
     <PlayerPropertyInput
       label="CSC"
+      icon={<OwnGoalIcon />}
       propertyValue={goals}
       min={0}
       max={3}

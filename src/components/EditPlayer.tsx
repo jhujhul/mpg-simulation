@@ -15,6 +15,8 @@ import {
   getHasPlayerScored,
   getIsPlayerPlayingForHomeTeam
 } from "../selectors";
+import MpgGoalIcon from "./MpgGoalIcon";
+import MpgGoalExplanation from "./MpgGoalExplanation";
 
 const EditPlayer: React.FunctionComponent = () => {
   const selectedPlayer = useSelector<AppState, Player | null>(state =>
@@ -55,8 +57,8 @@ const EditPlayer: React.FunctionComponent = () => {
       <div
         className={`flex justify-between py-1 pl-8 pr-4 text-white text-lg font-bold ${headerBackgroundColor}`}
       >
-        <span className="">{selectedPlayer.name}</span>
-        <button onClick={handleCloseClick} className="cursor-pointer">
+        <span>{selectedPlayer.name}</span>
+        <button onClick={handleCloseClick}>
           <svg
             className="w-4 h-4 fill-current"
             xmlns="http://www.w3.org/2000/svg"
@@ -77,8 +79,16 @@ const EditPlayer: React.FunctionComponent = () => {
             <PlayerGoalsInput playerId={selectedPlayer.id} />
             <PlayerOwnGoalsInput playerId={selectedPlayer.id} />
           </div>
-          <div className="flex items-center text-gray-700 text-lg">
-            But MPG: {hasPlayerScored ? 1 : 0}
+          <div className="flex flex-col justify-center items-center">
+            <div className="flex items-center">
+              <span className="mr-1">
+                <MpgGoalIcon />
+              </span>
+              <span className="text-gray-700 text-lg">
+                But MPG: {hasPlayerScored ? 1 : 0}
+              </span>
+            </div>
+            <MpgGoalExplanation />
           </div>
         </div>
         <NavigationChevronButton

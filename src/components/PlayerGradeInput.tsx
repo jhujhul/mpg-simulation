@@ -1,6 +1,6 @@
 import React from "react";
-import PlayerPropertyInput from "./PlayerPropertyInput";
 import { useSelector, useDispatch } from "react-redux";
+import PlayerPropertyInput from "./PlayerPropertyInput";
 import { AppState } from "../reducers";
 import { changePlayerGrade } from "../actions";
 
