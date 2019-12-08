@@ -10,18 +10,17 @@ import PlayerGoalsInput from "./PlayerGoalsInput";
 import PlayerGradeInput from "./PlayerGradeInput";
 import PlayerOwnGoalsInput from "./PlayerOwnGoalsInput";
 import NavigationChevronButton from "./NavigationChevronButton";
-import { Player } from "../reducers/players";
+import { PlayerPosition } from "../reducers/players";
 import {
   getHasPlayerScored,
-  getIsPlayerPlayingForHomeTeam
+  getIsPlayerPlayingForHomeTeam,
+  getSelectedPlayer
 } from "../selectors";
 import MpgGoalIcon from "./MpgGoalIcon";
 import MpgGoalExplanation from "./MpgGoalExplanation";
 
 const EditPlayer: React.FunctionComponent = () => {
-  const selectedPlayer = useSelector<AppState, Player | null>(state =>
-    state.selectedPlayerId ? state.players[state.selectedPlayerId] : null
-  );
+  const selectedPlayer = useSelector(getSelectedPlayer);
   const hasPlayerScored = useSelector<AppState, boolean>(state =>
     selectedPlayer ? getHasPlayerScored(state, selectedPlayer.id) : false
   );
@@ -79,17 +78,19 @@ const EditPlayer: React.FunctionComponent = () => {
             <PlayerGoalsInput playerId={selectedPlayer.id} />
             <PlayerOwnGoalsInput playerId={selectedPlayer.id} />
           </div>
-          <div className="flex flex-col justify-center items-center">
-            <div className="flex items-center">
-              <span className="mr-1">
-                <MpgGoalIcon />
-              </span>
-              <span className="text-gray-700 text-lg">
-                But MPG: {hasPlayerScored ? 1 : 0}
-              </span>
+          {selectedPlayer.position !== PlayerPosition.Goalkeeper && (
+            <div className="flex flex-col justify-center items-center">
+              <div className="flex items-center">
+                <span className="mr-1">
+                  <MpgGoalIcon />
+                </span>
+                <span className="text-gray-700 text-lg">
+                  But MPG: {hasPlayerScored ? 1 : 0}
+                </span>
+              </div>
+              <MpgGoalExplanation />
             </div>
-            <MpgGoalExplanation />
-          </div>
+          )}
         </div>
         <NavigationChevronButton
           isLeft={false}
