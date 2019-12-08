@@ -10,7 +10,7 @@ import {
 export type SelectedPlayerIdState = number | null;
 
 const selectedPlayerIdreducer: Reducer<SelectedPlayerIdState, AppAction> = (
-  state = 111,
+  state = null,
   action
 ) => {
   switch (action.type) {
