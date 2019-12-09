@@ -23,25 +23,30 @@ const MpgGoalExplanation: React.FunctionComponent = () => {
           style={{ backgroundColor: "rgba(0,0,0,0.8)" }}
         >
           <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-white">
-              <div className="flex justify-end p-1">
-                <button className="" onClick={() => setIsModalOpen(false)}>
-                  <svg
-                    className="w-4 h-4 fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
-                  </svg>
-                </button>
-              </div>
-              <div className="px-4 pb-2">
-                {hasSelectedPlayerScoredWithConditions.map(condition => {
-                  return (
-                    <p className="flex items-center">
+            <div className="bg-white w-4/5 relative px-4 pt-6 pb-4">
+              <button
+                className="absolute top-0 right-0 p-2"
+                onClick={() => setIsModalOpen(false)}
+              >
+                <svg
+                  className="w-6 h-6 fill-current text-gray-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
+                </svg>
+              </button>
+              {hasSelectedPlayerScoredWithConditions.map((condition, i) => {
+                const marginBottonClass =
+                  i < hasSelectedPlayerScoredWithConditions.length - 1 &&
+                  "mb-3";
+
+                return (
+                  <p className={`flex ${marginBottonClass}`}>
+                    <div className="w-5 h-5 flex-shrink-0">
                       {condition.isTrue ? (
                         <svg
-                          className="w-5 h-5 fill-current text-green-500"
+                          className="fill-current text-green-500"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                         >
@@ -49,7 +54,7 @@ const MpgGoalExplanation: React.FunctionComponent = () => {
                         </svg>
                       ) : (
                         <svg
-                          className="w-5 h-5 fill-current text-red-500"
+                          className="fill-current text-red-500"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                         >
@@ -57,11 +62,13 @@ const MpgGoalExplanation: React.FunctionComponent = () => {
                           <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
                         </svg>
                       )}
-                      <span className="ml-2">{condition.description}</span>
-                    </p>
-                  );
-                })}
-              </div>
+                    </div>
+                    <span className="ml-2 leading-tight">
+                      {condition.description}
+                    </span>
+                  </p>
+                );
+              })}
             </div>
           </div>
         </div>
