@@ -140,7 +140,7 @@ const getGradeCondition = (player: Player): Condition => {
 
 const getHasScoredCondition = (player: Player): Condition => {
   return {
-    description: "N'a pas marqué de vrai but",
+    description: "N'a pas marqué de but réel",
     isMet: player.goals === 0
   };
 };

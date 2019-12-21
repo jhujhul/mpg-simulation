@@ -93,7 +93,7 @@ const getHasEnemyTeamScoredRealGoalsCondition = (
   enemyPlayers: Player[]
 ): Condition => {
   return {
-    description: `L'équipe adverse a marqué au moins un vrai but`,
+    description: "L'équipe adverse a marqué au moins un but réel",
     isMet: enemyPlayers.some(p => p.goals > 0)
   };
 };

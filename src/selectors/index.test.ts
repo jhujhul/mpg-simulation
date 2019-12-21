@@ -233,7 +233,7 @@ describe("Selectors", () => {
           isMet: true
         },
         {
-          description: "N'a pas marqué de vrai but",
+          description: "N'a pas marqué de but réel",
           isMet: true
         },
         {
