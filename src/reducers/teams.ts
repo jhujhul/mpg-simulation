@@ -14,7 +14,6 @@ export enum Formation {
 export interface Team {
   id: number;
   name: string;
-  players: number[];
 }
 
 interface TeamsState {
@@ -24,13 +23,11 @@ interface TeamsState {
 const initialState: TeamsState = {
   1: {
     id: 1,
-    name: "Paris-SG",
-    players: [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111]
+    name: "Paris-SG"
   },
   2: {
     id: 2,
-    name: "Rennes",
-    players: [201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211]
+    name: "Rennes"
   }
 };
 

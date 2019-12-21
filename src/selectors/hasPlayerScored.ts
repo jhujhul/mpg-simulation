@@ -14,6 +14,7 @@ import {
 import { AppState } from "../reducers";
 import { Team } from "../reducers/teams";
 import { average } from "../utils";
+import { getPlayersByTeamId } from "./teams";
 
 export const getHasPlayerScored: TypedSelector<boolean, number> = (
   state,
@@ -90,7 +91,7 @@ const getHasPlayerScoredConditions: TypedSelector<Condition[], number> = (
     positionToPositionListToPassDico[playerPosition];
   const homeTeam = getHomeTeam(state);
   const awayTeam = getAwayTeam(state);
-  const isPlayerPlayingHome = homeTeam.players.includes(player.id);
+  const isPlayerPlayingHome = homeTeam.id === player.teamId;
   const enemyTeam = isPlayerPlayingHome ? awayTeam : homeTeam;
 
   let computedPlayerGrade = player.grade;
@@ -186,8 +187,7 @@ const getAverageGradeByTeamAndPosition = (
   team: Team,
   position: PlayerPosition
 ) => {
-  const notesArray = team.players
-    .map(playerId => getPlayer(state, playerId))
+  const notesArray = getPlayersByTeamId(state, team.id)
     .filter(p => p.position === position)
     .map(p => p.grade);
 

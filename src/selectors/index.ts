@@ -4,6 +4,7 @@ import { Team } from "../reducers/teams";
 import { Player } from "../reducers/players";
 import { getHasTeamGoalkeeperSavedGoal } from "./hasPlayerSavedGoal";
 import { getHasPlayerScored } from "./hasPlayerScored";
+import { getPlayersByTeamId } from "./teams";
 
 export type TypedSelector<TProps, TOwnProps = null> = Selector<
   AppState,
@@ -37,14 +38,15 @@ export const getAwayTeamTotalGoals: TypedSelector<number> = state => {
 const getTeamTotalGoals = (state: AppState, isHomeTeam: boolean): number => {
   const team = isHomeTeam ? getHomeTeam(state) : getAwayTeam(state);
   const enemyTeam = isHomeTeam ? getAwayTeam(state) : getHomeTeam(state);
-  const mpgGoals = team.players
-    .map(playerId => getHasPlayerScored(state, playerId))
+
+  const mpgGoals = getPlayersByTeamId(state, team.id)
+    .map(player => getHasPlayerScored(state, player.id))
     .reduce((acc, hasPlayerScored) => acc + Number(hasPlayerScored), 0);
-  const realGoals = team.players
-    .map(playerId => getPlayer(state, playerId).goals)
+  const realGoals = getPlayersByTeamId(state, team.id)
+    .map(player => getPlayer(state, player.id).goals)
     .reduce((acc, goals) => acc + goals, 0);
-  const ownGoalsFromEnemyTeam = enemyTeam.players
-    .map(playerId => getPlayer(state, playerId).ownGoals)
+  const ownGoalsFromEnemyTeam = getPlayersByTeamId(state, enemyTeam.id)
+    .map(player => getPlayer(state, player.id).ownGoals)
     .reduce((acc, ownGoals) => acc + ownGoals, 0);
   const saveGoalsFromEnemyGoalkeeper = Number(
     getHasTeamGoalkeeperSavedGoal(state, enemyTeam.id)

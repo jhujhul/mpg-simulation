@@ -1,6 +1,7 @@
-import { TypedSelector, Condition, getPlayer, areAllConditionsMet } from ".";
+import { TypedSelector, Condition, areAllConditionsMet } from ".";
 import { PlayerPosition, Player } from "../reducers/players";
 import { Team } from "../reducers/teams";
+import { getPlayersByTeamId } from "./teams";
 
 export const getHasSelectedPlayerSavedGoalConditions: TypedSelector<Condition[]> = state => {
   const { selectedPlayerId } = state;
@@ -14,9 +15,9 @@ export const getHasTeamGoalkeeperSavedGoal: TypedSelector<boolean, number> = (
   state,
   teamId
 ) => {
-  const teamGoalkeeper = state.teams[teamId].players
-    .map(playerId => getPlayer(state, playerId))
-    .find(player => player.position === PlayerPosition.Goalkeeper) as Player;
+  const teamGoalkeeper = getPlayersByTeamId(state, teamId).find(
+    player => player.position === PlayerPosition.Goalkeeper
+  ) as Player;
 
   return getHasPlayerSavedGoal(state, teamGoalkeeper.id);
 };
@@ -60,10 +61,8 @@ const getHasPlayerSavedGoalConditions: TypedSelector<Condition[], number> = (
   }
 
   const teams = Object.values(state.teams) as Team[];
-  const enemyTeam = teams.find(t => !t.players.includes(playerId)) as Team;
-  const enemyTeamPlayers = enemyTeam.players.map(
-    playerId => state.players[playerId]
-  );
+  const enemyTeam = teams.find(t => t.id !== player.teamId) as Team;
+  const enemyTeamPlayers = getPlayersByTeamId(state, enemyTeam.id);
   const hasEnemyTeamScoredRealGoalsCondition = getHasEnemyTeamScoredRealGoalsCondition(
     enemyTeamPlayers
   );
