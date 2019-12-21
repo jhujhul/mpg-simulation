@@ -1,4 +1,4 @@
-import { getHomeTeamGoals, getAwayTeamGoals, Condition } from ".";
+import { getHomeTeamTotalGoals, getAwayTeamTotalGoals, Condition } from ".";
 import { AppState } from "../reducers";
 import { PlayerPosition, Player } from "../reducers/players";
 import { Team } from "../reducers/teams";
@@ -108,7 +108,7 @@ describe("Selectors", () => {
       awayTeam: SimplifiedTeam
     ): [number, number] => {
       const state = createState(homeTeam, awayTeam);
-      return [getHomeTeamGoals(state), getAwayTeamGoals(state)];
+      return [getHomeTeamTotalGoals(state), getAwayTeamTotalGoals(state)];
     };
 
     it("should get right score when all players have 5", () => {

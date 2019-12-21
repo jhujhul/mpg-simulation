@@ -26,15 +26,15 @@ export const getAwayTeam: TypedSelector<Team> = state => {
   return state.teams[awayTeamId];
 };
 
-export const getHomeTeamGoals: TypedSelector<number> = state => {
-  return getTeamGoals(state, true);
+export const getHomeTeamTotalGoals: TypedSelector<number> = state => {
+  return getTeamTotalGoals(state, true);
 };
 
-export const getAwayTeamGoals: TypedSelector<number> = state => {
-  return getTeamGoals(state, false);
+export const getAwayTeamTotalGoals: TypedSelector<number> = state => {
+  return getTeamTotalGoals(state, false);
 };
 
-const getTeamGoals = (state: AppState, isHomeTeam: boolean): number => {
+const getTeamTotalGoals = (state: AppState, isHomeTeam: boolean): number => {
   const team = isHomeTeam ? getHomeTeam(state) : getAwayTeam(state);
   const enemyTeam = isHomeTeam ? getAwayTeam(state) : getHomeTeam(state);
   const mpgGoals = team.players

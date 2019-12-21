@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Team from "../components/Team";
-import Score from "../containers/Score";
+import Score from "./Score";
 import EditPlayer from "./EditPlayer";
 import { AppState } from "../reducers";
 import { getAwayTeamId } from "../selectors";
@@ -13,7 +13,7 @@ const App: React.FunctionComponent = () => {
   return (
     <div>
       <Score />
-      <div className="">
+      <div>
         <Team id={homeTeamId} isHomeTeam={true} />
         <Team id={awayTeamId} isHomeTeam={false} />
       </div>
