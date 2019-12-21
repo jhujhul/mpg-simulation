@@ -16,7 +16,7 @@ import { selectPlayer } from "../actions";
 import { getHasPlayerSavedGoal } from "../selectors/hasPlayerSavedGoal";
 import { getHasPlayerScored } from "../selectors/hasPlayerScored";
 
-const HOME_PLAYER_SKEW_ANGLE = -15;
+const SKEW_ANGLE = -15;
 
 interface Props {
   id: number;
@@ -61,19 +61,16 @@ const Player: React.FunctionComponent<Props> = props => {
   const playerContainerClass = classNames(
     "mx-1 my-1 cursor-pointer w-1/5 h-16 flex flex-col items-center relative"
   );
-  const playerSkewAngle = isPlayingForHomeTeam
-    ? HOME_PLAYER_SKEW_ANGLE
-    : -HOME_PLAYER_SKEW_ANGLE;
 
   return (
     <div className={playerContainerClass} onClick={handleClick}>
       <div
         className={playerGradeContainerClass}
-        style={{ transform: `skew(${playerSkewAngle}deg)` }}
+        style={{ transform: `skew(${SKEW_ANGLE}deg)` }}
       >
         <div
           className="w-full h-full flex items-center justify-center"
-          style={{ transform: `skew(${-playerSkewAngle}deg)` }}
+          style={{ transform: `skew(${-SKEW_ANGLE}deg)` }}
         >
           <span className={playerGradeClass}>{player.grade}</span>
           <div className="absolute top-0 right-0 w-3 -mr-3">
