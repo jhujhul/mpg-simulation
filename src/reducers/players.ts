@@ -52,28 +52,28 @@ const getPlayer = (
 
 const getinitialState = (): PlayersState => {
   const state: PlayersState = {
-    101: getPlayer(101, "Areola", PlayerPosition.Goalkeeper, 1),
-    102: getPlayer(102, "Alves", PlayerPosition.Defender, 1),
-    103: getPlayer(103, "Marquinhos", PlayerPosition.Defender, 1),
-    104: getPlayer(104, "Thiago Silva", PlayerPosition.Defender, 1),
-    105: getPlayer(105, "Meunier", PlayerPosition.Defender, 1),
-    106: getPlayer(106, "Verratti", PlayerPosition.Midfielder, 1),
-    107: getPlayer(107, "Draxler", PlayerPosition.Midfielder, 1),
-    108: getPlayer(108, "Rabiot", PlayerPosition.Midfielder, 1),
-    109: getPlayer(109, "Paredes", PlayerPosition.Midfielder, 1),
+    101: getPlayer(101, "Navas", PlayerPosition.Goalkeeper, 1),
+    102: getPlayer(102, "Meunier", PlayerPosition.Defender, 1),
+    103: getPlayer(103, "Silva", PlayerPosition.Defender, 1),
+    104: getPlayer(104, "Kehrer", PlayerPosition.Defender, 1),
+    105: getPlayer(105, "Marquinhos", PlayerPosition.Defender, 1),
+    106: getPlayer(106, "Bernat", PlayerPosition.Midfielder, 1),
+    107: getPlayer(107, "Verratti", PlayerPosition.Midfielder, 1),
+    108: getPlayer(108, "Paredes", PlayerPosition.Midfielder, 1),
+    109: getPlayer(109, "Di Maria", PlayerPosition.Midfielder, 1),
     110: getPlayer(110, "Neymar", PlayerPosition.Forward, 1),
     111: getPlayer(111, "Mbappé", PlayerPosition.Forward, 1),
-    201: getPlayer(201, "Maignan", PlayerPosition.Goalkeeper, 2),
-    202: getPlayer(202, "Celik", PlayerPosition.Defender, 2),
-    203: getPlayer(203, "Fonte", PlayerPosition.Defender, 2),
-    204: getPlayer(204, "Gabriel", PlayerPosition.Defender, 2),
-    205: getPlayer(205, "Koné", PlayerPosition.Defender, 2),
-    206: getPlayer(206, "Mendes", PlayerPosition.Midfielder, 2),
-    207: getPlayer(207, "Soumaré", PlayerPosition.Midfielder, 2),
-    208: getPlayer(208, "Pépé", PlayerPosition.Midfielder, 2),
-    209: getPlayer(209, "Bamba", PlayerPosition.Midfielder, 2),
-    210: getPlayer(210, "Ikoné", PlayerPosition.Forward, 2),
-    211: getPlayer(211, "Rémy", PlayerPosition.Forward, 2)
+    201: getPlayer(201, "Mendy", PlayerPosition.Goalkeeper, 2),
+    202: getPlayer(202, "Traoré", PlayerPosition.Defender, 2),
+    203: getPlayer(203, "Da Silva", PlayerPosition.Defender, 2),
+    204: getPlayer(204, "Morel", PlayerPosition.Defender, 2),
+    205: getPlayer(205, "Doumbia", PlayerPosition.Defender, 2),
+    206: getPlayer(206, "Camavinga", PlayerPosition.Midfielder, 2),
+    207: getPlayer(207, "Grenier", PlayerPosition.Midfielder, 2),
+    208: getPlayer(208, "Bourigeaud", PlayerPosition.Midfielder, 2),
+    209: getPlayer(209, "Raphinha", PlayerPosition.Midfielder, 2),
+    210: getPlayer(210, "Hunou", PlayerPosition.Forward, 2),
+    211: getPlayer(211, "Niang", PlayerPosition.Forward, 2)
   };
 
   return state;
@@ -149,7 +149,7 @@ const updatePlayerFormation = (
   // Convert 103 -> 3, 210 -> 10...
   const playerNumber = parseInt(playerId.toString().slice(-2));
 
-  // numéro des joueurs dont la position ne change pas, peut importe la formation
+  // numéro des joueurs dont la position peut changer
   const affectedPlayers = [5, 6, 9, 10];
 
   if (!affectedPlayers.includes(playerNumber)) {
