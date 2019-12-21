@@ -16,6 +16,11 @@ export enum PlayerPosition {
   Forward = "F"
 }
 
+export type FieldPlayerPosition =
+  | PlayerPosition.Defender
+  | PlayerPosition.Midfielder
+  | PlayerPosition.Forward;
+
 export interface Player {
   id: number;
   name: string;
@@ -40,7 +45,7 @@ const getPlayer = (
   name,
   grade: 6,
   position,
-  goals: id === 111 ? 1 : 0,
+  goals: 0,
   ownGoals: 0,
   teamId
 });

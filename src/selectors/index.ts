@@ -1,14 +1,17 @@
-import { Selector } from "react-redux";
-import { average } from "../utils";
+import { Selector, TypedUseSelectorHook, useSelector } from "react-redux";
 import { AppState } from "../reducers";
 import { Team } from "../reducers/teams";
-import { PlayerPosition, Player } from "../reducers/players";
+import { Player } from "../reducers/players";
+import { getHasTeamGoalkeeperSavedGoal } from "./hasPlayerSavedGoal";
+import { getHasPlayerScored } from "./hasPlayerScored";
 
-type TypedSelector<TProps, TOwnProps = null> = Selector<
+export type TypedSelector<TProps, TOwnProps = null> = Selector<
   AppState,
   TProps,
   TOwnProps
 >;
+
+export const useTypedSelector: TypedUseSelectorHook<AppState> = useSelector;
 
 export const getAwayTeamId: TypedSelector<number> = state =>
   state.homeTeamId === 1 ? 2 : 1;
@@ -43,8 +46,13 @@ const getTeamGoals = (state: AppState, isHomeTeam: boolean): number => {
   const ownGoalsFromEnemyTeam = enemyTeam.players
     .map(playerId => getPlayer(state, playerId).ownGoals)
     .reduce((acc, ownGoals) => acc + ownGoals, 0);
+  const saveGoalsFromEnemyGoalkeeper = Number(
+    getHasTeamGoalkeeperSavedGoal(state, enemyTeam.id)
+  );
 
-  return mpgGoals + realGoals + ownGoalsFromEnemyTeam;
+  return (
+    mpgGoals + realGoals + ownGoalsFromEnemyTeam - saveGoalsFromEnemyGoalkeeper
+  );
 };
 
 export const getPlayer: TypedSelector<Player, number> = (state, playerId) =>
@@ -62,212 +70,15 @@ export const getIsPlayerPlayingForHomeTeam: TypedSelector<boolean, number> = (
   return state.players[playerId].teamId === state.homeTeamId;
 };
 
-export const getHasPlayerScored: TypedSelector<boolean, number> = (
-  state,
-  playerId
-) => {
-  const player = getPlayer(state, playerId);
-
-  if (
-    player.position === PlayerPosition.Goalkeeper ||
-    player.grade < 5 ||
-    player.goals > 0
-  ) {
-    return false;
-  }
-
-  const positionToPositionListToPassDico = {
-    [PlayerPosition.Defender]: [
-      PlayerPosition.Forward,
-      PlayerPosition.Midfielder,
-      PlayerPosition.Defender,
-      PlayerPosition.Goalkeeper
-    ],
-    [PlayerPosition.Midfielder]: [
-      PlayerPosition.Midfielder,
-      PlayerPosition.Defender,
-      PlayerPosition.Goalkeeper
-    ],
-    [PlayerPosition.Forward]: [
-      PlayerPosition.Defender,
-      PlayerPosition.Goalkeeper
-    ]
-  };
-  const positionListToPass: PlayerPosition[] =
-    positionToPositionListToPassDico[player.position];
-  const homeTeam = getHomeTeam(state);
-  const awayTeam = getAwayTeam(state);
-  const isPlayerPlayingHome = homeTeam.players.includes(player.id);
-  const enemyTeam = isPlayerPlayingHome ? awayTeam : homeTeam;
-
-  let playerGrade = player.grade;
-  for (let i = 0; i < positionListToPass.length; i++) {
-    const position = positionListToPass[i];
-    const positionAverageGrade = getAverageGradeByTeamAndPosition(
-      state,
-      enemyTeam,
-      position
-    );
-    if (
-      playerGrade < positionAverageGrade ||
-      (playerGrade === positionAverageGrade && !isPlayerPlayingHome)
-    ) {
-      return false;
-    }
-    playerGrade -= i === 0 ? 1 : 0.5;
-  }
-
-  return true;
+export const getSelectedPlayer: TypedSelector<Player | null> = state => {
+  return state.selectedPlayerId ? state.players[state.selectedPlayerId] : null;
 };
 
 export interface Condition {
   description: string;
-  isTrue: boolean;
+  isMet: boolean;
 }
-export const getHasSelectedPlayerScoredWithConditions: TypedSelector<Condition[]> = state => {
-  const conditions: Condition[] = [];
 
-  const selectedPlayer = getSelectedPlayer(state);
-
-  if (selectedPlayer === null) {
-    return conditions;
-  }
-
-  if (selectedPlayer.position === PlayerPosition.Goalkeeper) {
-    throw new Error("Goalkeepers cannot score an MPG goal");
-  }
-
-  const gradeCondition = getGradeCondition(selectedPlayer);
-  conditions.push(gradeCondition);
-
-  if (!gradeCondition.isTrue) {
-    return conditions;
-  }
-
-  const hasScoredCondition = getHasScoredCondition(selectedPlayer);
-  conditions.push(hasScoredCondition);
-
-  if (!hasScoredCondition.isTrue) {
-    return conditions;
-  }
-
-  const positionToPositionListToPassDico = {
-    [PlayerPosition.Defender]: [
-      PlayerPosition.Forward,
-      PlayerPosition.Midfielder,
-      PlayerPosition.Defender,
-      PlayerPosition.Goalkeeper
-    ],
-    [PlayerPosition.Midfielder]: [
-      PlayerPosition.Midfielder,
-      PlayerPosition.Defender,
-      PlayerPosition.Goalkeeper
-    ],
-    [PlayerPosition.Forward]: [
-      PlayerPosition.Defender,
-      PlayerPosition.Goalkeeper
-    ]
-  };
-  const positionListToPass: PlayerPosition[] =
-    positionToPositionListToPassDico[selectedPlayer.position];
-  const homeTeam = getHomeTeam(state);
-  const awayTeam = getAwayTeam(state);
-  const isPlayerPlayingHome = homeTeam.players.includes(selectedPlayer.id);
-  const enemyTeam = isPlayerPlayingHome ? awayTeam : homeTeam;
-
-  let computedPlayerGrade = selectedPlayer.grade;
-  for (let i = 0; i < positionListToPass.length; i++) {
-    const position = positionListToPass[i];
-    const positionAverageGrade = getAverageGradeByTeamAndPosition(
-      state,
-      enemyTeam,
-      position
-    );
-
-    const positionGradeCondition = getPositionGradeCondition(
-      selectedPlayer.grade,
-      computedPlayerGrade,
-      positionAverageGrade,
-      position,
-      isPlayerPlayingHome
-    );
-    conditions.push(positionGradeCondition);
-
-    if (!positionGradeCondition.isTrue) {
-      return conditions;
-    }
-
-    computedPlayerGrade -= i === 0 ? 1 : 0.5;
-  }
-
-  return conditions;
-};
-
-const getGradeCondition = (player: Player): Condition => {
-  const playerGrade = player.grade;
-  const minimumGrade = 5;
-
-  return {
-    description: `A une note (${playerGrade}) >= à ${minimumGrade}`,
-    isTrue: player.grade >= minimumGrade
-  };
-};
-
-const getHasScoredCondition = (player: Player): Condition => {
-  return {
-    description: "N'a pas marqué de vrai but",
-    isTrue: player.goals === 0
-  };
-};
-
-const getPositionGradeCondition = (
-  originalPlayerGrade: number,
-  computedPlayerGrade: number,
-  positionAverageGrade: number,
-  position: PlayerPosition,
-  isPlayerPlayingHome: boolean
-): Condition => {
-  const gradeDifference = originalPlayerGrade - computedPlayerGrade;
-  const gradeDifferenceDescriptionPart =
-    gradeDifference === 0
-      ? ""
-      : `${originalPlayerGrade} - ${gradeDifference} = `;
-  const gradeDescriptionPart = `${gradeDifferenceDescriptionPart}${computedPlayerGrade}`;
-
-  const gradeComparisonPart = `>${isPlayerPlayingHome ? "=" : ""}`;
-
-  const positionToPositionDescriptionDico: {
-    [key in PlayerPosition]: string;
-  } = {
-    [PlayerPosition.Forward]: "moyenne de l'attaque",
-    [PlayerPosition.Midfielder]: "moyenne du milieu",
-    [PlayerPosition.Defender]: "moyenne de la défense",
-    [PlayerPosition.Goalkeeper]: "note du goal"
-  };
-  const positionDescriptionPart = positionToPositionDescriptionDico[position];
-
-  const description = `A une note (${gradeDescriptionPart}) ${gradeComparisonPart} à la ${positionDescriptionPart} adverse (${positionAverageGrade})`;
-
-  return {
-    description,
-    isTrue:
-      computedPlayerGrade > positionAverageGrade ||
-      (isPlayerPlayingHome && computedPlayerGrade === positionAverageGrade)
-  };
-};
-
-const getAverageGradeByTeamAndPosition = (
-  state: AppState,
-  team: Team,
-  position: PlayerPosition
-) => {
-  const notesArray = team.players
-    .map(playerId => getPlayer(state, playerId))
-    .filter(p => p.position === position)
-    .map(p => p.grade);
-  return average(notesArray);
-};
-
-export const getSelectedPlayer: TypedSelector<Player | null> = state => {
-  return state.selectedPlayerId ? state.players[state.selectedPlayerId] : null;
+export const areAllConditionsMet = (conditions: Condition[]): boolean => {
+  return conditions.every(condition => condition.isMet);
 };

@@ -1,9 +1,8 @@
 import React from "react";
 
-export interface Props {
+interface Props {
   goalNumber: number;
 }
-
 const PlayerGoalsList: React.FunctionComponent<Props> = props => {
   const { goalNumber, children } = props;
 

@@ -1,29 +1,43 @@
 import React from "react";
 import classNames from "classnames";
-import { Player as PlayerModel } from "../reducers/players";
 import PlayerGoalsList from "./PlayerGoalsList";
 import MpgGoalIcon from "./MpgGoalIcon";
 import RealGoalIcon from "./RealGoalIcon";
 import OwnGoalIcon from "./OwnGoalIcon";
-
-export interface PlayerProps {
-  player: PlayerModel;
-  isSelected: boolean;
-  hasScored: boolean;
-  isPlayingForHomeTeam: boolean;
-  onClick: () => void;
-}
+import GoalSaveIcon from "./GoalSaveIcon";
+import {
+  getPlayer,
+  useTypedSelector,
+  isPlayerSelected,
+  getIsPlayerPlayingForHomeTeam
+} from "../selectors";
+import { useDispatch } from "react-redux";
+import { selectPlayer } from "../actions";
+import { getHasPlayerSavedGoal } from "../selectors/hasPlayerSavedGoal";
+import { getHasPlayerScored } from "../selectors/hasPlayerScored";
 
 const HOME_PLAYER_SKEW_ANGLE = -15;
 
-const Player: React.FunctionComponent<PlayerProps> = props => {
-  const {
-    player,
-    isSelected,
-    hasScored,
-    isPlayingForHomeTeam,
-    onClick
-  } = props;
+interface Props {
+  id: number;
+}
+const Player: React.FunctionComponent<Props> = props => {
+  const { id } = props;
+
+  const player = useTypedSelector(state => getPlayer(state, id));
+  const isSelected = useTypedSelector(state => isPlayerSelected(state, id));
+  const hasScored = useTypedSelector(state => getHasPlayerScored(state, id));
+  const hasSavedGoal = useTypedSelector(state =>
+    getHasPlayerSavedGoal(state, id)
+  );
+  const isPlayingForHomeTeam = useTypedSelector(state =>
+    getIsPlayerPlayingForHomeTeam(state, id)
+  );
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
+    dispatch(selectPlayer(id));
+  };
 
   const playerNameClass = classNames(
     "text-center text-xs leading-none text-gray-700",
@@ -52,7 +66,7 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
     : -HOME_PLAYER_SKEW_ANGLE;
 
   return (
-    <div className={playerContainerClass} onClick={onClick}>
+    <div className={playerContainerClass} onClick={handleClick}>
       <div
         className={playerGradeContainerClass}
         style={{ transform: `skew(${playerSkewAngle}deg)` }}
@@ -64,6 +78,7 @@ const Player: React.FunctionComponent<PlayerProps> = props => {
           <span className={playerGradeClass}>{player.grade}</span>
           <div className="absolute top-0 right-0 w-3 -mr-3">
             {hasScored && <MpgGoalIcon />}
+            {hasSavedGoal && <GoalSaveIcon />}
             <PlayerGoalsList goalNumber={player.goals}>
               <RealGoalIcon />
             </PlayerGoalsList>

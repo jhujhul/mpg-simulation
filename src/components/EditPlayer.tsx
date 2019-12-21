@@ -11,19 +11,12 @@ import PlayerGradeInput from "./PlayerGradeInput";
 import PlayerOwnGoalsInput from "./PlayerOwnGoalsInput";
 import NavigationChevronButton from "./NavigationChevronButton";
 import { PlayerPosition } from "../reducers/players";
-import {
-  getHasPlayerScored,
-  getIsPlayerPlayingForHomeTeam,
-  getSelectedPlayer
-} from "../selectors";
-import MpgGoalIcon from "./MpgGoalIcon";
-import MpgGoalExplanation from "./MpgGoalExplanation";
+import { getIsPlayerPlayingForHomeTeam, getSelectedPlayer } from "../selectors";
+import MpgGoalInfo from "./MpgGoalInfo";
+import MpgSaveInfo from "./MpgSaveInfo";
 
 const EditPlayer: React.FunctionComponent = () => {
   const selectedPlayer = useSelector(getSelectedPlayer);
-  const hasPlayerScored = useSelector<AppState, boolean>(state =>
-    selectedPlayer ? getHasPlayerScored(state, selectedPlayer.id) : false
-  );
   const isPlayingForHomeTeam = useSelector<AppState, boolean>(state =>
     selectedPlayer
       ? getIsPlayerPlayingForHomeTeam(state, selectedPlayer.id)
@@ -50,6 +43,9 @@ const EditPlayer: React.FunctionComponent = () => {
   const headerBackgroundColor = isPlayingForHomeTeam
     ? "bg-blue-600"
     : "bg-red-600";
+
+  const isPlayerGoalkeeper =
+    selectedPlayer.position === PlayerPosition.Goalkeeper;
 
   return (
     <div className="bottom-0 sticky z-10 shadow">
@@ -78,19 +74,9 @@ const EditPlayer: React.FunctionComponent = () => {
             <PlayerGoalsInput playerId={selectedPlayer.id} />
             <PlayerOwnGoalsInput playerId={selectedPlayer.id} />
           </div>
-          {selectedPlayer.position !== PlayerPosition.Goalkeeper && (
-            <div className="flex flex-col justify-center items-center">
-              <div className="flex items-center">
-                <span className="mr-1">
-                  <MpgGoalIcon />
-                </span>
-                <span className="text-gray-700 text-lg">
-                  But MPG: {hasPlayerScored ? 1 : 0}
-                </span>
-              </div>
-              <MpgGoalExplanation />
-            </div>
-          )}
+          <div className="flex flex-col justify-center items-center">
+            {isPlayerGoalkeeper ? <MpgSaveInfo /> : <MpgGoalInfo />}
+          </div>
         </div>
         <NavigationChevronButton
           isLeft={false}

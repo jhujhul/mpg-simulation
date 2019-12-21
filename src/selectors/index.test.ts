@@ -1,12 +1,8 @@
-import {
-  getHomeTeamGoals,
-  getAwayTeamGoals,
-  getHasSelectedPlayerScoredWithConditions,
-  Condition
-} from ".";
+import { getHomeTeamGoals, getAwayTeamGoals, Condition } from ".";
 import { AppState } from "../reducers";
 import { PlayerPosition, Player } from "../reducers/players";
 import { Team } from "../reducers/teams";
+import { getHasSelectedPlayerScoredConditions } from "./hasPlayerScored";
 
 describe("Selectors", () => {
   type SimplifiedPlayer = [number, number?, number?];
@@ -156,9 +152,30 @@ describe("Selectors", () => {
 
       expect(score).toEqual([5, 2]);
     });
+
+    it("should get right score when the goalkeeper stops a goal", () => {
+      // prettier-ignore
+      const homeTeam: SimplifiedTeam = [
+        [[8]],
+        [[6], [7], [5.5], [6]],
+        [[5.5], [5.5], [5]],
+        [[3.5], [5], [7, 2]]
+      ];
+      // prettier-ignore
+      const awayTeam: SimplifiedTeam = [
+        [[3.5], [9.5]],
+        [[5.5], [5], [7]],
+        [[6.5], [5.5], [5.5],  [2.5], [6]],
+        [[8]]
+      ];
+
+      const score = getScore(homeTeam, awayTeam);
+
+      expect(score).toEqual([1, 1]);
+    });
   });
 
-  describe("getHasPlayerScoredWithConditions", () => {
+  describe(getHasSelectedPlayerScoredConditions.name, () => {
     it("should return correct conditions when the first one is false", () => {
       // prettier-ignore
       const homeTeam: SimplifiedTeam = [
@@ -174,14 +191,14 @@ describe("Selectors", () => {
         [[5], [5], [5], [5]],
         [[5]]
       ];
-      const state = createState(homeTeam, awayTeam, 111);
+      const state = createState(homeTeam, awayTeam, 101);
 
-      const result = getHasSelectedPlayerScoredWithConditions(state);
+      const result = getHasSelectedPlayerScoredConditions(state);
 
       const expectedResult: Condition[] = [
         {
-          description: "A une note (4.5) >= à 5",
-          isTrue: false
+          description: "N'est pas gardien de but",
+          isMet: false
         }
       ];
       expect(result).toEqual(expectedResult);
@@ -204,36 +221,40 @@ describe("Selectors", () => {
       ];
       const state = createState(homeTeam, awayTeam, 102);
 
-      const result = getHasSelectedPlayerScoredWithConditions(state);
+      const result = getHasSelectedPlayerScoredConditions(state);
 
       const expectedResult: Condition[] = [
         {
+          description: "N'est pas gardien de but",
+          isMet: true
+        },
+        {
           description: "A une note (7.5) >= à 5",
-          isTrue: true
+          isMet: true
         },
         {
           description: "N'a pas marqué de vrai but",
-          isTrue: true
+          isMet: true
         },
         {
           description:
             "A une note (7.5) >= à la moyenne de l'attaque adverse (6)",
-          isTrue: true
+          isMet: true
         },
         {
           description:
             "A une note (7.5 - 1 = 6.5) >= à la moyenne du milieu adverse (6.5)",
-          isTrue: true
+          isMet: true
         },
         {
           description:
             "A une note (7.5 - 1.5 = 6) >= à la moyenne de la défense adverse (5)",
-          isTrue: true
+          isMet: true
         },
         {
           description:
             "A une note (7.5 - 2 = 5.5) >= à la note du goal adverse (7)",
-          isTrue: false
+          isMet: false
         }
       ];
       expect(result).toEqual(expectedResult);

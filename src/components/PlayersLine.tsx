@@ -1,5 +1,5 @@
 import React from "react";
-import Player from "../containers/Player";
+import Player from "./Player";
 
 interface PlayersLineProps {
   playerIds: number[];
