@@ -5,11 +5,12 @@ interface Props {
   value: number;
   min: number;
   max: number;
-  step: number;
   onChange: (value: number) => void;
+  step?: number;
+  isDisabled?: boolean;
 }
 const IncrementInput: React.FunctionComponent<Props> = props => {
-  const { value, min, max, step, onChange } = props;
+  const { value, min, max, onChange, step = 1, isDisabled = false } = props;
 
   const handleMinusClick = () => {
     const newValue = value - step;
@@ -31,7 +32,7 @@ const IncrementInput: React.FunctionComponent<Props> = props => {
     <div className="flex items-center">
       <RoundedButton
         text="-"
-        disabled={value === min}
+        disabled={value === min || isDisabled}
         onClick={handleMinusClick}
       />
       <div className="w-8 py-2 text-center text-gray-700 font-bold">
@@ -39,7 +40,7 @@ const IncrementInput: React.FunctionComponent<Props> = props => {
       </div>
       <RoundedButton
         text="+"
-        disabled={value === max}
+        disabled={value === max || isDisabled}
         onClick={handlePlusClick}
       />
     </div>

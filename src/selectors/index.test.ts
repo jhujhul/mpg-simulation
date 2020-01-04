@@ -5,7 +5,9 @@ import { Team } from "../reducers/teams";
 import { getHasSelectedPlayerScoredConditions } from "./hasPlayerScored";
 
 describe("Selectors", () => {
-  type SimplifiedPlayer = [number, number?, number?];
+  type SimplifiedPlayer = SimplifiedPlayingPlayer | SimplifiedRotaldoPlayer;
+  type SimplifiedRotaldoPlayer = [2.5, 0, 0, true];
+  type SimplifiedPlayingPlayer = [number, number?, number?, false?];
   type SimplifiedTeam = [
     SimplifiedPlayer[],
     SimplifiedPlayer[],
@@ -42,19 +44,18 @@ describe("Selectors", () => {
     const team = createTeam(id);
     state.teams[team.id] = team;
 
-    let playerIndex = 0;
+    let playerId = id * 100 + 1;
     simplifiedTeam.forEach((playerLine, lineIndex) => {
       const playerPosition = getPlayerPosition(lineIndex);
 
       playerLine.forEach(simplifiedPlayer => {
-        const playerId = team.players[playerIndex];
         state.players[playerId] = createPlayer(
           simplifiedPlayer,
           playerId,
           playerPosition,
           id
         );
-        playerIndex++;
+        playerId++;
       });
     });
 
@@ -62,12 +63,9 @@ describe("Selectors", () => {
   };
 
   const createTeam = (id: number): Team => {
-    const players = Array.from(Array(11)).map((v, i) => id * 100 + 1 + i);
-
     return {
       id,
-      name: id.toString(),
-      players
+      name: id.toString()
     };
   };
 
@@ -91,15 +89,29 @@ describe("Selectors", () => {
     position: PlayerPosition,
     teamId: number
   ): Player => {
-    return {
-      id,
-      name: id.toString(),
-      position,
-      grade: simplifiedPlayer[0],
-      goals: simplifiedPlayer[1] || 0,
-      ownGoals: simplifiedPlayer[2] || 0,
-      teamId
-    };
+    if (simplifiedPlayer[3] === true) {
+      return {
+        id,
+        name: id.toString(),
+        position,
+        grade: 2.5,
+        goals: 0,
+        ownGoals: 0,
+        isRotaldo: true,
+        teamId
+      };
+    } else {
+      return {
+        id,
+        name: id.toString(),
+        position,
+        grade: simplifiedPlayer[0],
+        goals: simplifiedPlayer[1] || 0,
+        ownGoals: simplifiedPlayer[2] || 0,
+        isRotaldo: false,
+        teamId
+      };
+    }
   };
 
   describe("Score", () => {
@@ -143,7 +155,7 @@ describe("Selectors", () => {
       // prettier-ignore
       const awayTeam: SimplifiedTeam = [
         [[6.5, 1], [5.5], [4]],
-        [[2.5, 0, 1], [2.5], [4.5], [2.5]],
+        [[2.5, 0, 1, false], [2.5], [4.5], [2.5]],
         [[5.5], [4], [6]],
         [[4]]
       ];
@@ -172,6 +184,28 @@ describe("Selectors", () => {
       const score = getScore(homeTeam, awayTeam);
 
       expect(score).toEqual([1, 1]);
+    });
+
+    // cf this game https://mpg.football/league/LJXFEKGV/results/detail/1_9_1?lang=fr-FR
+    it("should get right score when there are 3 rotaldos", () => {
+      // prettier-ignore
+      const homeTeam: SimplifiedTeam = [
+        [[4]],
+        [[4], [6.5], [5]],
+        [[4.5], [4.5], [4.5], [6.5, 1]],
+        [[6, 1], [5.5, 1], [6.5, 1]]
+      ];
+      // prettier-ignore
+      const awayTeam: SimplifiedTeam = [
+        [[6.5, 1], [5.5], [4]],
+        [[2.5, 0, 0, true], [2.5, 0, 0, true], [4.5], [2.5, 0, 0, true]],
+        [[5.5], [4],  [6]],
+        [[4]]
+      ];
+
+      const score = getScore(homeTeam, awayTeam);
+
+      expect(score).toEqual([5, 2]);
     });
   });
 

@@ -5,7 +5,8 @@ import {
   CHANGE_PLAYER_GOALS,
   CHANGE_PLAYER_OWN_GOALS,
   SELECT_FORMATION,
-  SelectFormationAction
+  SelectFormationAction,
+  TOGGLE_PLAYER_IS_ROTALDO
 } from "../actions";
 import { Formation } from "./teams";
 
@@ -21,7 +22,20 @@ export type FieldPlayerPosition =
   | PlayerPosition.Midfielder
   | PlayerPosition.Forward;
 
-export interface Player {
+export type Player = PlayingPlayer | RotaldoPlayer;
+
+interface RotaldoPlayer extends BasePlayer {
+  isRotaldo: true;
+  grade: 2.5;
+  goals: 0;
+  ownGoals: 0;
+}
+
+interface PlayingPlayer extends BasePlayer {
+  isRotaldo: false;
+}
+
+interface BasePlayer {
   id: number;
   name: string;
   position: PlayerPosition;
@@ -29,6 +43,7 @@ export interface Player {
   goals: number;
   ownGoals: number;
   teamId: number;
+  isRotaldo: boolean;
 }
 
 interface PlayersState {
@@ -47,7 +62,8 @@ const getPlayer = (
   position,
   goals: 0,
   ownGoals: 0,
-  teamId
+  teamId,
+  isRotaldo: false
 });
 
 const getinitialState = (): PlayersState => {
@@ -67,7 +83,7 @@ const getinitialState = (): PlayersState => {
     202: getPlayer(202, "Traoré", PlayerPosition.Defender, 2),
     203: getPlayer(203, "Da Silva", PlayerPosition.Defender, 2),
     204: getPlayer(204, "Morel", PlayerPosition.Defender, 2),
-    205: getPlayer(205, "Doumbia", PlayerPosition.Defender, 2),
+    205: getPlayer(205, "Maouassa", PlayerPosition.Defender, 2),
     206: getPlayer(206, "Camavinga", PlayerPosition.Midfielder, 2),
     207: getPlayer(207, "Grenier", PlayerPosition.Midfielder, 2),
     208: getPlayer(208, "Bourigeaud", PlayerPosition.Midfielder, 2),
@@ -88,36 +104,76 @@ const playersReducer: Reducer<PlayersState, AppAction> = (
   switch (action.type) {
     case CHANGE_PLAYER_GRADE: {
       const { grade, playerId } = action;
+      const player = state[playerId];
 
-      return {
-        ...state,
-        [playerId]: {
-          ...state[playerId],
-          grade
-        }
-      };
+      if (player.isRotaldo) {
+        return state;
+      } else {
+        return {
+          ...state,
+          [playerId]: {
+            ...player,
+            grade
+          }
+        };
+      }
     }
     case CHANGE_PLAYER_GOALS: {
       const { goals, playerId } = action;
+      const player = state[playerId];
 
-      return {
-        ...state,
-        [playerId]: {
-          ...state[playerId],
-          goals
-        }
-      };
+      if (player.isRotaldo) {
+        return state;
+      } else {
+        return {
+          ...state,
+          [playerId]: {
+            ...player,
+            goals
+          }
+        };
+      }
     }
     case CHANGE_PLAYER_OWN_GOALS: {
       const { ownGoals, playerId } = action;
+      const player = state[playerId];
 
-      return {
-        ...state,
-        [playerId]: {
-          ...state[playerId],
-          ownGoals
-        }
-      };
+      if (player.isRotaldo) {
+        return state;
+      } else {
+        return {
+          ...state,
+          [playerId]: {
+            ...player,
+            ownGoals
+          }
+        };
+      }
+    }
+    case TOGGLE_PLAYER_IS_ROTALDO: {
+      const { playerId } = action;
+      const player = state[playerId];
+
+      if (player.isRotaldo) {
+        return {
+          ...state,
+          [playerId]: {
+            ...player,
+            isRotaldo: false
+          }
+        };
+      } else {
+        return {
+          ...state,
+          [playerId]: {
+            ...player,
+            isRotaldo: true,
+            grade: 2.5,
+            goals: 0,
+            ownGoals: 0
+          }
+        };
+      }
     }
     case SELECT_FORMATION: {
       const players = Object.entries(state);

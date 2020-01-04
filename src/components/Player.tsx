@@ -25,6 +25,7 @@ const Player: React.FunctionComponent<Props> = props => {
   const { id } = props;
 
   const player = useTypedSelector(state => getPlayer(state, id));
+  const { isRotaldo } = player;
   const isSelected = useTypedSelector(state => isPlayerSelected(state, id));
   const hasScored = useTypedSelector(state => getHasPlayerScored(state, id));
   const hasSavedGoal = useTypedSelector(state =>
@@ -52,7 +53,8 @@ const Player: React.FunctionComponent<Props> = props => {
       "bg-blue-600": isPlayingForHomeTeam && !isSelected,
       "bg-red-600": !isPlayingForHomeTeam && !isSelected,
       "bg-blue-800": isPlayingForHomeTeam && isSelected,
-      "bg-red-800": !isPlayingForHomeTeam && isSelected
+      "bg-red-800": !isPlayingForHomeTeam && isSelected,
+      "opacity-50": isRotaldo
     }
   );
   const playerGradeClass = classNames("text-red-100", {
@@ -85,7 +87,9 @@ const Player: React.FunctionComponent<Props> = props => {
           </div>
         </div>
       </div>
-      <div className={playerNameClass}>{player.name}</div>
+      <div className={playerNameClass}>
+        {isRotaldo ? "Rotaldo" : player.name}
+      </div>
     </div>
   );
 };

@@ -48,13 +48,35 @@ const getTeamTotalGoals = (state: AppState, isHomeTeam: boolean): number => {
   const ownGoalsFromEnemyTeam = getPlayersByTeamId(state, enemyTeam.id)
     .map(player => getPlayer(state, player.id).ownGoals)
     .reduce((acc, ownGoals) => acc + ownGoals, 0);
+  const rotaldoGoalsFromEnemyTeam = getRotaldoGoalsFromEnemyTeam(
+    state,
+    enemyTeam
+  );
   const saveGoalsFromEnemyGoalkeeper = Number(
     getHasTeamGoalkeeperSavedGoal(state, enemyTeam.id)
   );
 
   return (
-    mpgGoals + realGoals + ownGoalsFromEnemyTeam - saveGoalsFromEnemyGoalkeeper
+    mpgGoals +
+    realGoals +
+    ownGoalsFromEnemyTeam +
+    rotaldoGoalsFromEnemyTeam -
+    saveGoalsFromEnemyGoalkeeper
   );
+};
+
+const getRotaldoGoalsFromEnemyTeam = (
+  state: AppState,
+  enemyTeam: Team
+): number => {
+  const numberOfRotaldoPlayersFromEnemyTeam = getPlayersByTeamId(
+    state,
+    enemyTeam.id
+  )
+    .map(player => getPlayer(state, player.id))
+    .reduce((acc, player) => acc + Number(player.isRotaldo), 0);
+
+  return Math.floor(numberOfRotaldoPlayersFromEnemyTeam / 3);
 };
 
 export const getPlayer: TypedSelector<Player, number> = (state, playerId) =>

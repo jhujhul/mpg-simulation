@@ -1,17 +1,17 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import PlayerPropertyInput from "./PlayerPropertyInput";
-import { AppState } from "../reducers";
 import { changePlayerGrade } from "../actions";
+import IncrementInput from "./IncrementInput";
+import { useTypedSelector, getPlayer } from "../selectors";
 
 interface Props {
   playerId: number;
 }
 const PlayerGradeInput: React.FunctionComponent<Props> = props => {
   const { playerId } = props;
-  const goals = useSelector<AppState, number>(
-    state => state.players[playerId].grade
-  );
+
+  const player = useTypedSelector(state => getPlayer(state, playerId));
   const dispatch = useDispatch();
 
   const handleChange = (newGrade: number) => {
@@ -19,14 +19,16 @@ const PlayerGradeInput: React.FunctionComponent<Props> = props => {
   };
 
   return (
-    <PlayerPropertyInput
-      label="Note"
-      propertyValue={goals}
-      min={0}
-      max={10}
-      step={0.5}
-      onChange={handleChange}
-    />
+    <PlayerPropertyInput label="Note">
+      <IncrementInput
+        value={player.grade}
+        min={0}
+        max={10}
+        step={0.5}
+        onChange={handleChange}
+        isDisabled={player.isRotaldo}
+      />
+    </PlayerPropertyInput>
   );
 };
 

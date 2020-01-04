@@ -14,6 +14,7 @@ import { PlayerPosition } from "../reducers/players";
 import { getIsPlayerPlayingForHomeTeam, getSelectedPlayer } from "../selectors";
 import MpgGoalInfo from "./MpgGoalInfo";
 import MpgSaveInfo from "./MpgSaveInfo";
+import PlayerRotaldoInput from "./PlayerRotaldoInput";
 
 const EditPlayer: React.FunctionComponent = () => {
   const selectedPlayer = useSelector(getSelectedPlayer);
@@ -52,7 +53,9 @@ const EditPlayer: React.FunctionComponent = () => {
       <div
         className={`flex justify-between py-1 pl-8 pr-4 text-white text-lg font-bold ${headerBackgroundColor}`}
       >
-        <span>{selectedPlayer.name}</span>
+        <span>
+          {selectedPlayer.isRotaldo ? "Rotaldo" : selectedPlayer.name}
+        </span>
         <button onClick={handleCloseClick}>
           <svg
             className="w-4 h-4 fill-current"
@@ -73,6 +76,7 @@ const EditPlayer: React.FunctionComponent = () => {
             <PlayerGradeInput playerId={selectedPlayer.id} />
             <PlayerGoalsInput playerId={selectedPlayer.id} />
             <PlayerOwnGoalsInput playerId={selectedPlayer.id} />
+            <PlayerRotaldoInput playerId={selectedPlayer.id} />
           </div>
           <div className="flex flex-col justify-center items-center">
             {isPlayerGoalkeeper ? <MpgSaveInfo /> : <MpgGoalInfo />}
