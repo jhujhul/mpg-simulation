@@ -24,7 +24,7 @@ const Team: React.FunctionComponent<TeamProps> = props => {
     "flex",
     "relative",
     "items-center",
-    "bg-green-200",
+    "bg-grass-green",
     "border-white",
     "py-1",
     {
@@ -54,28 +54,42 @@ const Team: React.FunctionComponent<TeamProps> = props => {
         />
       </div>
       {
-        <PlayersLine
-          isReverseOrder={!isHomeTeam}
-          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Goalkeeper)}
-        />
+        <div className={`w-full ${isHomeTeam && "mb-1"}`}>
+          <PlayersLine
+            isReverseOrder={!isHomeTeam}
+            playerIds={getPlayerIdsByPosition(
+              players,
+              PlayerPosition.Goalkeeper
+            )}
+          />
+        </div>
       }
       {
-        <PlayersLine
-          isReverseOrder={!isHomeTeam}
-          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Defender)}
-        />
+        <div className={`w-full mb-1`}>
+          <PlayersLine
+            isReverseOrder={!isHomeTeam}
+            playerIds={getPlayerIdsByPosition(players, PlayerPosition.Defender)}
+          />
+        </div>
       }
       {
-        <PlayersLine
-          isReverseOrder={!isHomeTeam}
-          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Midfielder)}
-        />
+        <div className={`w-full mb-1`}>
+          <PlayersLine
+            isReverseOrder={!isHomeTeam}
+            playerIds={getPlayerIdsByPosition(
+              players,
+              PlayerPosition.Midfielder
+            )}
+          />
+        </div>
       }
       {
-        <PlayersLine
-          isReverseOrder={!isHomeTeam}
-          playerIds={getPlayerIdsByPosition(players, PlayerPosition.Forward)}
-        />
+        <div className={`w-full ${!isHomeTeam && "mb-1"}`}>
+          <PlayersLine
+            isReverseOrder={!isHomeTeam}
+            playerIds={getPlayerIdsByPosition(players, PlayerPosition.Forward)}
+          />
+        </div>
       }
     </div>
   );

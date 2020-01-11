@@ -18,7 +18,7 @@ const MpgSuccessExplanationLink: React.FunctionComponent<Props> = props => {
     <Fragment>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="text-gray-700 underline"
+        className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-3 mt-1 border border-gray-400 rounded-full shadow"
       >
         Pourquoi ?
       </button>

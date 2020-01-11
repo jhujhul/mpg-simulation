@@ -14,7 +14,7 @@ const RoundedButton: React.FunctionComponent<RoundedButtonProps> = props => {
     <button
       onClick={onClick}
       style={{ touchAction: "manipulation" }}
-      className={`flex items-center justify-center rounded-full h-8 w-8 text-gray-700 font-bold border border-gray-700 focus:outline-none ${opacityClassname}`}
+      className={`flex items-center justify-center rounded-full h-8 w-8 text-gray-700 font-bold border border-gray-700 focus:outline-none ${opacityClassname} select-none`}
       disabled={disabled}
     >
       {text}

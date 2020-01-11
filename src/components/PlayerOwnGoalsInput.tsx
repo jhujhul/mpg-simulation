@@ -22,7 +22,7 @@ const PlayerOwnGoalsInput: React.FunctionComponent<Props> = props => {
   return (
     <PlayerPropertyInput label="CSC" icon={<OwnGoalIcon />}>
       <IncrementInput
-        value={player.goals}
+        value={player.ownGoals}
         min={0}
         max={3}
         onChange={handleChange}

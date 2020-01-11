@@ -12,6 +12,7 @@ const NavigationChevronButton: React.FunctionComponent<Props> = props => {
     <button
       onClick={onClick}
       className="flex items-center cursor-pointer focus:outline-none hover:bg-gray-200"
+      style={{ touchAction: "manipulation" }}
     >
       <svg
         className="w-6 h-6 fill-current text-gray-600"

@@ -61,7 +61,7 @@ const Player: React.FunctionComponent<Props> = props => {
     "font-bold": isSelected
   });
   const playerContainerClass = classNames(
-    "mx-1 my-1 cursor-pointer w-1/5 h-16 flex flex-col items-center relative"
+    "mx-1 my-1 cursor-pointer w-1/5 flex flex-col items-center relative"
   );
 
   return (
