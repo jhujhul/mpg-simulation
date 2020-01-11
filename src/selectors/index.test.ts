@@ -282,12 +282,12 @@ describe("Selectors", () => {
         },
         {
           description:
-            "A une note (7.5 - 1.5 = 6) >= à la moyenne de la défense adverse (5)",
+            "A une note (7.5 - 1 - 0.5 = 6) >= à la moyenne de la défense adverse (5)",
           isMet: true
         },
         {
           description:
-            "A une note (7.5 - 2 = 5.5) >= à la note du goal adverse (7)",
+            "A une note (7.5 - 1 - 0.5 - 0.5 = 5.5) >= à la note du goal adverse (7)",
           isMet: false
         }
       ];

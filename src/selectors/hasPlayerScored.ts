@@ -94,7 +94,6 @@ const getHasPlayerScoredConditions: TypedSelector<Condition[], number> = (
   const isPlayerPlayingHome = homeTeam.id === player.teamId;
   const enemyTeam = isPlayerPlayingHome ? awayTeam : homeTeam;
 
-  let computedPlayerGrade = player.grade;
   for (let i = 0; i < positionListToPass.length; i++) {
     const position = positionListToPass[i];
     const positionAverageGrade = getAverageGradeByTeamAndPosition(
@@ -105,7 +104,7 @@ const getHasPlayerScoredConditions: TypedSelector<Condition[], number> = (
 
     const positionGradeCondition = getPositionGradeCondition(
       player.grade,
-      computedPlayerGrade,
+      i,
       positionAverageGrade,
       position,
       isPlayerPlayingHome
@@ -115,8 +114,6 @@ const getHasPlayerScoredConditions: TypedSelector<Condition[], number> = (
     if (!positionGradeCondition.isMet) {
       return conditions;
     }
-
-    computedPlayerGrade -= i === 0 ? 1 : 0.5;
   }
 
   return conditions;
@@ -147,18 +144,26 @@ const getHasScoredCondition = (player: Player): Condition => {
 };
 
 const getPositionGradeCondition = (
-  originalPlayerGrade: number,
-  computedPlayerGrade: number,
+  playerGrade: number,
+  numberOfPositionPassed: number,
   positionAverageGrade: number,
   position: PlayerPosition,
   isPlayerPlayingHome: boolean
 ): Condition => {
-  const gradeDifference = originalPlayerGrade - computedPlayerGrade;
-  const gradeDifferenceDescriptionPart =
-    gradeDifference === 0
-      ? ""
-      : `${originalPlayerGrade} - ${gradeDifference} = `;
-  const gradeDescriptionPart = `${gradeDifferenceDescriptionPart}${computedPlayerGrade}`;
+  let computedPlayerGrade: number;
+  let gradeDescriptionPart: string;
+  if (numberOfPositionPassed === 0) {
+    computedPlayerGrade = playerGrade;
+    gradeDescriptionPart = playerGrade.toString();
+  } else {
+    computedPlayerGrade = playerGrade - 1 - (numberOfPositionPassed - 1) * 0.5;
+    let gradeDifferenceDescriptionPart = `${playerGrade} - 1`;
+    for (let i = 0; i < numberOfPositionPassed - 1; i++) {
+      gradeDifferenceDescriptionPart += " - 0.5";
+    }
+    gradeDifferenceDescriptionPart += " = ";
+    gradeDescriptionPart = `${gradeDifferenceDescriptionPart}${computedPlayerGrade}`;
+  }
 
   const gradeComparisonPart = `>${isPlayerPlayingHome ? "=" : ""}`;
 
