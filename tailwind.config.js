@@ -2,7 +2,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "grass-green": "#4FD357"
+        "grass-green": "#8fcc7b"
       }
     }
   }
