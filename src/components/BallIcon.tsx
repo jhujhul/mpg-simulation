@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-  // Must be the same syntax as TailwindCSS color, ie indigo-600
+  // Must be the same syntax as TailwindCSS text color, ie text-indigo-600
   color: string;
 }
 
@@ -11,7 +11,7 @@ const BallIcon: React.FunctionComponent<Props> = props => {
   return (
     <div className="rounded-full w-3 h-3 bg-white flex-shrink-0">
       <svg
-        className={`w-full h-full fill-current text-${color}`}
+        className={`w-full h-full fill-current ${color}`}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 56.693 56.693"
       >
