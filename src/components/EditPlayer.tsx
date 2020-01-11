@@ -51,7 +51,7 @@ const EditPlayer: React.FunctionComponent = () => {
   return (
     <div className="bottom-0 sticky z-10 shadow">
       <div
-        className={`flex justify-between py-1 pl-8 pr-4 text-white text-lg font-bold ${headerBackgroundColor}`}
+        className={`flex justify-between py-1 pl-12 pr-4 text-white text-lg font-bold ${headerBackgroundColor}`}
       >
         <span>
           {selectedPlayer.isRotaldo ? "Rotaldo" : selectedPlayer.name}
