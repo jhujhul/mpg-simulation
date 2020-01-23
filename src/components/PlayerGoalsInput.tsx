@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import { changePlayerGoals } from "../actions";
 import RealGoalIcon from "./RealGoalIcon";
 import IncrementInput from "./IncrementInput";
-import { useTypedSelector, getPlayer } from "../selectors";
+import { useTypedSelector } from "../selectors";
+import { getPlayerById } from "../selectors/players";
 
 interface Props {
   playerId: number;
@@ -12,7 +13,7 @@ interface Props {
 const PlayerGoalsInput: React.FunctionComponent<Props> = props => {
   const { playerId } = props;
 
-  const player = useTypedSelector(state => getPlayer(state, playerId));
+  const player = useTypedSelector(state => getPlayerById(state, playerId));
   const dispatch = useDispatch();
 
   const handleGoalsChange = (newGoals: number) => {

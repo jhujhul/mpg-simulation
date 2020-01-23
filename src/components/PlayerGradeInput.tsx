@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import PlayerPropertyInput from "./PlayerPropertyInput";
 import { changePlayerGrade } from "../actions";
 import IncrementInput from "./IncrementInput";
-import { useTypedSelector, getPlayer } from "../selectors";
+import { useTypedSelector } from "../selectors";
+import { getPlayerById } from "../selectors/players";
 
 interface Props {
   playerId: number;
@@ -11,7 +12,7 @@ interface Props {
 const PlayerGradeInput: React.FunctionComponent<Props> = props => {
   const { playerId } = props;
 
-  const player = useTypedSelector(state => getPlayer(state, playerId));
+  const player = useTypedSelector(state => getPlayerById(state, playerId));
   const dispatch = useDispatch();
 
   const handleChange = (newGrade: number) => {

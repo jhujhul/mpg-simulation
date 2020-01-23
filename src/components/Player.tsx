@@ -5,16 +5,16 @@ import MpgGoalIcon from "./MpgGoalIcon";
 import RealGoalIcon from "./RealGoalIcon";
 import OwnGoalIcon from "./OwnGoalIcon";
 import GoalSaveIcon from "./GoalSaveIcon";
-import {
-  getPlayer,
-  useTypedSelector,
-  isPlayerSelected,
-  getIsPlayerPlayingForHomeTeam
-} from "../selectors";
+import { useTypedSelector } from "../selectors";
 import { useDispatch } from "react-redux";
 import { selectPlayer } from "../actions";
 import { getHasPlayerSavedGoal } from "../selectors/hasPlayerSavedGoal";
 import { getHasPlayerScored } from "../selectors/hasPlayerScored";
+import {
+  isPlayerSelected,
+  getPlayerById,
+  getIsPlayerPlayingForHomeTeam
+} from "../selectors/players";
 
 const SKEW_ANGLE = -15;
 
@@ -24,7 +24,7 @@ interface Props {
 const Player: React.FunctionComponent<Props> = props => {
   const { id } = props;
 
-  const player = useTypedSelector(state => getPlayer(state, id));
+  const player = useTypedSelector(state => getPlayerById(state, id));
   const { isRotaldo } = player;
   const isSelected = useTypedSelector(state => isPlayerSelected(state, id));
   const hasScored = useTypedSelector(state => getHasPlayerScored(state, id));

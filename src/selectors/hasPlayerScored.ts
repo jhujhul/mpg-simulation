@@ -2,19 +2,15 @@ import {
   TypedSelector,
   getHomeTeam,
   getAwayTeam,
-  getPlayer,
   areAllConditionsMet,
   Condition
 } from ".";
-import {
-  FieldPlayerPosition,
-  PlayerPosition,
-  Player
-} from "../reducers/players";
+import { FieldPlayerPosition, PlayerPosition } from "../reducers/players";
 import { AppState } from "../reducers";
 import { Team } from "../reducers/teams";
 import { average } from "../utils";
 import { getPlayersByTeamId } from "./teams";
+import { getPlayerById, Player } from "./players";
 
 export const getHasPlayerScored: TypedSelector<boolean, number> = (
   state,
@@ -42,7 +38,7 @@ const getHasPlayerScoredConditions: TypedSelector<Condition[], number> = (
 ) => {
   const conditions: Condition[] = [];
 
-  const player = state.players[playerId];
+  const player = getPlayerById(state, playerId);
 
   if (player === null) {
     return conditions;

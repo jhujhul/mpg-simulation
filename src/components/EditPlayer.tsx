@@ -11,10 +11,13 @@ import PlayerGradeInput from "./PlayerGradeInput";
 import PlayerOwnGoalsInput from "./PlayerOwnGoalsInput";
 import NavigationChevronButton from "./NavigationChevronButton";
 import { PlayerPosition } from "../reducers/players";
-import { getIsPlayerPlayingForHomeTeam, getSelectedPlayer } from "../selectors";
 import MpgGoalInfo from "./MpgGoalInfo";
 import MpgSaveInfo from "./MpgSaveInfo";
 import PlayerRotaldoInput from "./PlayerRotaldoInput";
+import {
+  getSelectedPlayer,
+  getIsPlayerPlayingForHomeTeam
+} from "../selectors/players";
 
 const EditPlayer: React.FunctionComponent = () => {
   const selectedPlayer = useSelector(getSelectedPlayer);

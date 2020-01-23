@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import PlayerPropertyInput from "./PlayerPropertyInput";
 import { AppState } from "../reducers";
 import { togglePlayerIsRotaldo } from "../actions";
+import { getPlayerById } from "../selectors/players";
 
 interface Props {
   playerId: number;
@@ -10,7 +11,7 @@ interface Props {
 const PlayerRotaldoInput: React.FunctionComponent<Props> = props => {
   const { playerId } = props;
   const isRotaldo = useSelector<AppState, boolean>(
-    state => state.players[playerId].isRotaldo
+    state => getPlayerById(state, playerId).isRotaldo
   );
   const dispatch = useDispatch();
 
