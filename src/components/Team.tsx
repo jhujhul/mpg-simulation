@@ -2,12 +2,13 @@ import React from "react";
 import classNames from "classnames";
 import { useDispatch } from "react-redux";
 import PlayersLine from "./PlayersLine";
-import { Player, PlayerPosition } from "../reducers/players";
+import { PlayerPosition } from "../reducers/players";
 import { Formation } from "../reducers/teams";
 import TeamFormationSelect from "./TeamFormationSelect";
 import { selectFormation } from "../actions";
 import { getTeamFormation, getPlayersByTeamId } from "../selectors/teams";
 import { useTypedSelector } from "../selectors";
+import { Player } from "../selectors/players";
 
 interface TeamProps {
   id: number;

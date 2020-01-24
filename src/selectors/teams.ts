@@ -1,6 +1,7 @@
 import { Formation } from "../reducers/teams";
 import { TypedSelector } from ".";
-import { PlayerPosition, Player } from "../reducers/players";
+import { PlayerPosition } from "../reducers/players";
+import { getAllPlayers, Player } from "./players";
 
 export const getTeamFormation: TypedSelector<Formation, number> = (
   state,
@@ -42,7 +43,7 @@ export const getPlayersByTeamId: TypedSelector<Player[], number> = (
   state,
   teamId
 ) => {
-  const players = Object.values(state.players) as Player[];
+  const players = getAllPlayers(state);
 
   return players.filter(p => p.teamId === teamId);
 };

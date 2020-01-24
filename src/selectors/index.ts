@@ -1,7 +1,6 @@
 import { Selector, TypedUseSelectorHook, useSelector } from "react-redux";
 import { AppState } from "../reducers";
 import { Team } from "../reducers/teams";
-import { Player } from "../reducers/players";
 import { getHasTeamGoalkeeperSavedGoal } from "./hasPlayerSavedGoal";
 import { getHasPlayerScored } from "./hasPlayerScored";
 import { getPlayersByTeamId } from "./teams";
@@ -41,13 +40,13 @@ const getTeamTotalGoals = (state: AppState, isHomeTeam: boolean): number => {
 
   const mpgGoals = getPlayersByTeamId(state, team.id)
     .map(player => getHasPlayerScored(state, player.id))
-    .reduce((acc, hasPlayerScored) => acc + Number(hasPlayerScored), 0);
+    .reduce((acc: number, hasPlayerScored) => acc + Number(hasPlayerScored), 0);
   const realGoals = getPlayersByTeamId(state, team.id)
-    .map(player => getPlayer(state, player.id).goals)
-    .reduce((acc, goals) => acc + goals, 0);
+    .map(player => player.goals)
+    .reduce((acc: number, goals) => acc + goals, 0);
   const ownGoalsFromEnemyTeam = getPlayersByTeamId(state, enemyTeam.id)
-    .map(player => getPlayer(state, player.id).ownGoals)
-    .reduce((acc, ownGoals) => acc + ownGoals, 0);
+    .map(player => player.ownGoals)
+    .reduce((acc: number, ownGoals) => acc + ownGoals, 0);
   const rotaldoGoalsFromEnemyTeam = getRotaldoGoalsFromEnemyTeam(
     state,
     enemyTeam
@@ -72,30 +71,9 @@ const getRotaldoGoalsFromEnemyTeam = (
   const numberOfRotaldoPlayersFromEnemyTeam = getPlayersByTeamId(
     state,
     enemyTeam.id
-  )
-    .map(player => getPlayer(state, player.id))
-    .reduce((acc, player) => acc + Number(player.isRotaldo), 0);
+  ).reduce((acc, player) => acc + Number(player.isRotaldo), 0);
 
   return Math.floor(numberOfRotaldoPlayersFromEnemyTeam / 3);
-};
-
-export const getPlayer: TypedSelector<Player, number> = (state, playerId) =>
-  state.players[playerId];
-
-export const isPlayerSelected: TypedSelector<boolean, number> = (
-  state,
-  playerId
-) => playerId === state.selectedPlayerId;
-
-export const getIsPlayerPlayingForHomeTeam: TypedSelector<boolean, number> = (
-  state,
-  playerId
-): boolean => {
-  return state.players[playerId].teamId === state.homeTeamId;
-};
-
-export const getSelectedPlayer: TypedSelector<Player | null> = state => {
-  return state.selectedPlayerId ? state.players[state.selectedPlayerId] : null;
 };
 
 export interface Condition {

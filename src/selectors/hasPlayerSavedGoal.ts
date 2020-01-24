@@ -1,7 +1,8 @@
 import { TypedSelector, Condition, areAllConditionsMet } from ".";
-import { PlayerPosition, Player } from "../reducers/players";
+import { PlayerPosition } from "../reducers/players";
 import { Team } from "../reducers/teams";
 import { getPlayersByTeamId } from "./teams";
+import { getPlayerById, Player } from "./players";
 
 export const getHasSelectedPlayerSavedGoalConditions: TypedSelector<Condition[]> = state => {
   const { selectedPlayerId } = state;
@@ -40,7 +41,7 @@ const getHasPlayerSavedGoalConditions: TypedSelector<Condition[], number> = (
 ) => {
   const conditions: Condition[] = [];
 
-  const player = state.players[playerId];
+  const player = getPlayerById(state, playerId);
 
   if (player === null) {
     return conditions;
