@@ -24,3 +24,6 @@ yarn-error.log*
 
 # tailwind generated css
 /src/index.css
+
+# downloaded mpg data
+/scripts/data

@@ -1,0 +1,21 @@
+API mpg
+
+GET https://api.monpetitgazon.com/championship/match/1060710
+-> récupère résultat d'un match avec notes et stats des joueurs
+Page correspondante:
+https://mpg.football/championships/1/match/1060710
+
+GET https://api.monpetitgazon.com/championship/1/calendar/19
+-> récupère les résultats d'une journée
+Page correspondante:
+https://mpg.football/championships/1/calendar?day=19
+
+GET https://api.monpetitgazon.com/stats/championship/1/2019
+-> liste des joueurs d'une ligue, avec leurs moyennes de buts / notes etc...
+Page correspondante:
+https://mpg.football/data/players/1
+
+GET https://api.monpetitgazon.com/stats/player/220160?season=2019
+-> récupère les stats détaillés d'un joueur pour la saison en cours
+Page correspondante:
+https://mpg.football/data/player/stats/220160
