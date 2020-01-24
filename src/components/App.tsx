@@ -11,7 +11,7 @@ const App: React.FunctionComponent = () => {
   const awayTeamId = useSelector(getAwayTeamId);
 
   return (
-    <div>
+    <div className="max-w-lg mx-auto">
       <Score />
       <div>
         <Team id={homeTeamId} isHomeTeam={true} />
