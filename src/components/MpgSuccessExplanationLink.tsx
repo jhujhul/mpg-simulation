@@ -29,7 +29,7 @@ const MpgSuccessExplanationLink: React.FunctionComponent<Props> = props => {
           style={{ backgroundColor: "rgba(0,0,0,0.8)" }}
         >
           <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-white w-4/5 relative px-4 pt-6 pb-4">
+            <div className="max-w-lg bg-white w-4/5 relative px-4 pt-6 pb-4">
               <button
                 className="absolute top-0 right-0 p-2"
                 onClick={() => setIsModalOpen(false)}
