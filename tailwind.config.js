@@ -5,5 +5,6 @@ module.exports = {
         "grass-green": "#8fcc7b"
       }
     }
-  }
+  },
+  plugins: [require("@tailwindcss/custom-forms")]
 };

@@ -21,7 +21,12 @@ const PlayerRotaldoInput: React.FunctionComponent<Props> = props => {
 
   return (
     <PlayerPropertyInput label="Rotaldo">
-      <input type="checkbox" checked={isRotaldo} onChange={handleChange} />
+      <input
+        type="checkbox"
+        checked={isRotaldo}
+        onChange={handleChange}
+        className="form-checkbox text-indigo-600 h-5 w-5"
+      />
     </PlayerPropertyInput>
   );
 };
