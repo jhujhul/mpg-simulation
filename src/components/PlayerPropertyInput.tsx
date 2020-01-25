@@ -13,7 +13,7 @@ const PlayerPropertyInput: React.FunctionComponent<PlayerPropertyInputProps> = p
       <div className="w-16">
         <label className="block text-gray-700 mb-0 pr-4">{label}</label>
       </div>
-      {children}
+      <div className="flex-grow flex justify-center">{children}</div>
     </div>
   );
 };
