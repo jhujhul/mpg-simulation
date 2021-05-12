@@ -22,6 +22,9 @@ async function main() {
   const forwards = players.filter(isForward);
   console.log("Nombre d'attaquants", forwards.length);
 
+  const matches = players.reduce((acc, player) => {
+    return acc.concat(player.stats.matches);
+  }, []);
   const forwardMatches = forwards.reduce((acc, player) => {
     return acc.concat(player.stats.matches);
   }, []);
@@ -31,6 +34,7 @@ async function main() {
   const forwardMatchesWithGoals = forwardMatches.filter(
     match => match.info.goals > 0
   );
+  const matchesWithGoals = matches.filter(match => match.info.goals > 0);
   console.log("Nombre de matches avec but", forwardMatchesWithGoals.length);
 
   const forwardMatchesWithoutGoals = forwardMatches.filter(
@@ -56,6 +60,10 @@ async function main() {
   );
 
   getForwardGoalRates(forwardMatchesWithGoals);
+  getForwardGoalRates(forwardMatchesWithoutGoals);
+
+  const match = forwardMatchesWithGoals.find(m => m.info.rate === 4);
+  console.log("buteur et note de 4", match);
 }
 
 const getForwardGoalRates = forwardMatchesWithGoals => {
